@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Heart, Wind, Pen, Music, Coffee, Smartphone, Users, Mountain, Book, Palette, Sunrise, Moon, Waves, Leaf, Sparkles, X } from "lucide-react";
+import { Heart, Wind, Music, Coffee, Mountain, Sunrise, Moon, Waves, Leaf, Sparkles, BookOpen } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -16,9 +17,13 @@ interface Activity {
   title: string;
   description: string;
   category: string;
-  color: string;
-  instructions: string[];
   duration: string;
+  steps: string[];
+  hasAlternative?: boolean;
+  alternative?: {
+    title: string;
+    steps: string[];
+  };
 }
 
 const activities: Activity[] = [
@@ -27,152 +32,69 @@ const activities: Activity[] = [
     title: "Breathing Exercise",
     description: "5-minute guided breathing for calm",
     category: "Mindful",
-    color: "text-accent",
     duration: "5 min",
-    instructions: [
+    hasAlternative: true,
+    steps: [
       "Find a comfortable seated position",
-      "Close your eyes or soften your gaze",
-      "Breathe in slowly through your nose for 4 counts",
-      "Hold your breath gently for 4 counts",
-      "Exhale slowly through your mouth for 6 counts",
-      "Repeat for 5 minutes, focusing only on your breath",
+      "Close your eyes gently",
+      "Breathe in slowly for 4 counts",
+      "Hold for 4 counts",
+      "Breathe out for 6 counts",
+      "Repeat this cycle 5-10 times",
       "Notice how your body feels more relaxed"
-    ]
+    ],
+    alternative: {
+      title: "Box Breathing",
+      steps: [
+        "Sit comfortably and relax your shoulders",
+        "Breathe in for 4 counts",
+        "Hold for 4 counts",
+        "Breathe out for 4 counts",
+        "Hold empty for 4 counts",
+        "Repeat 4-5 times"
+      ]
+    }
   },
   {
     icon: Music,
     title: "Soothing Sounds",
     description: "Nature sounds and calming music",
     category: "Mindful",
-    color: "text-primary",
     duration: "10-20 min",
-    instructions: [
-      "Find a quiet, comfortable space",
-      "Use headphones for the best experience",
-      "Search YouTube for: rain sounds, ocean waves, or lo-fi music",
-      "Close your eyes and let the sounds wash over you",
-      "Try not to think about anything specific",
-      "Just be present with the sounds",
-      "Stay for at least 10 minutes"
-    ]
-  },
-  {
-    icon: Heart,
-    title: "Gentle Stretching",
-    description: "Easy movements to release tension",
-    category: "Movement",
-    color: "text-secondary",
-    duration: "10 min",
-    instructions: [
-      "Start with neck rolls - 5 in each direction",
-      "Roll your shoulders back 10 times",
-      "Reach your arms up high and stretch to each side",
-      "Do some gentle twists from side to side",
-      "Stretch your legs - touch your toes if you can",
-      "Don't force anything - just gentle movements",
-      "Notice where you were holding tension"
-    ]
-  },
-  {
-    icon: Mountain,
-    title: "Short Walk",
-    description: "Get outside, even for 10 minutes",
-    category: "Movement",
-    color: "text-accent",
-    duration: "10-30 min",
-    instructions: [
-      "Put on comfortable shoes",
-      "Step outside - around your block is perfect",
-      "Leave your phone on silent or at home",
-      "Walk at a comfortable pace",
-      "Notice 5 things you can see",
-      "Take deep breaths of fresh air",
-      "There's no destination - just walk and be present"
-    ]
-  },
-  {
-    icon: Pen,
-    title: "Free Writing",
-    description: "Let your thoughts flow on paper",
-    category: "Creative",
-    color: "text-primary",
-    duration: "10-15 min",
-    instructions: [
-      "Grab a pen and paper (or use the Journal page)",
-      "Set a timer for 10 minutes",
-      "Write whatever comes to mind - don't stop",
-      "Don't worry about spelling or grammar",
-      "No one will read this but you",
-      "Let your thoughts flow freely",
-      "When the timer goes off, take a deep breath"
-    ]
-  },
-  {
-    icon: Palette,
-    title: "Art & Doodling",
-    description: "Express yourself with colors",
-    category: "Creative",
-    color: "text-secondary",
-    duration: "15-30 min",
-    instructions: [
-      "Get paper and any coloring tools (crayons, markers, pencils)",
-      "Don't plan what to draw",
-      "Just start making marks on the paper",
-      "Use colors that feel right in the moment",
-      "Draw patterns, shapes, or whatever flows",
-      "This isn't about making 'good art'",
-      "It's about expressing what's inside"
-    ]
-  },
-  {
-    icon: Users,
-    title: "Connect",
-    description: "Text a friend or family member",
-    category: "Social",
-    color: "text-accent",
-    duration: "5-10 min",
-    instructions: [
-      "Think of someone who makes you feel safe",
-      "Send them a simple message",
-      "You don't have to explain everything",
-      "Even 'hey, thinking of you' is enough",
-      "Or share something funny you saw",
-      "Connection doesn't have to be deep to help",
-      "Just reaching out matters"
-    ]
+    hasAlternative: true,
+    steps: [
+      "Put on headphones if possible",
+      "Choose nature sounds (rain, ocean, forest)",
+      "Close your eyes and listen",
+      "Let the sounds wash over you",
+      "Focus on different layers of sound",
+      "Stay present with the experience"
+    ],
+    alternative: {
+      title: "Uplifting Music",
+      steps: [
+        "Create a playlist of songs that make you feel good",
+        "Choose upbeat, positive music",
+        "Sing along if you feel like it",
+        "Move your body to the rhythm",
+        "Let the music lift your mood"
+      ]
+    }
   },
   {
     icon: Coffee,
     title: "Mindful Tea",
     description: "Slow down with a warm drink",
     category: "Mindful",
-    color: "text-primary",
     duration: "15 min",
-    instructions: [
-      "Make your favorite warm drink (tea, hot chocolate, etc.)",
+    steps: [
+      "Make your favorite warm drink",
       "While it's brewing, take 3 deep breaths",
       "Find a cozy spot to sit",
       "Hold the warm cup in your hands",
-      "Notice the temperature, the smell, the color",
+      "Notice the temperature, smell, color",
       "Take small sips and really taste it",
       "Let this be a moment just for you"
-    ]
-  },
-  {
-    icon: Book,
-    title: "Read",
-    description: "Get lost in a good story",
-    category: "Creative",
-    color: "text-secondary",
-    duration: "20-30 min",
-    instructions: [
-      "Pick a book you enjoy (fiction works great)",
-      "Find a comfortable spot",
-      "Read for at least 15 minutes",
-      "Let yourself get absorbed in the story",
-      "This gives your mind a break from your own thoughts",
-      "Notice how you feel after reading",
-      "It's okay to escape for a while"
     ]
   },
   {
@@ -180,9 +102,8 @@ const activities: Activity[] = [
     title: "Morning Ritual",
     description: "Start your day with intention",
     category: "Mindful",
-    color: "text-accent",
     duration: "10 min",
-    instructions: [
+    steps: [
       "Before checking your phone, take 5 deep breaths",
       "Stretch while still in bed",
       "Think of one thing you're looking forward to",
@@ -197,9 +118,8 @@ const activities: Activity[] = [
     title: "Evening Wind-Down",
     description: "Prepare for restful sleep",
     category: "Mindful",
-    color: "text-primary",
     duration: "30 min",
-    instructions: [
+    steps: [
       "An hour before bed, dim the lights",
       "Put your phone on silent and across the room",
       "Do something calming (read, stretch, listen to music)",
@@ -210,47 +130,12 @@ const activities: Activity[] = [
     ]
   },
   {
-    icon: Waves,
-    title: "Progressive Relaxation",
-    description: "Release physical tension",
-    category: "Movement",
-    color: "text-secondary",
-    duration: "10-15 min",
-    instructions: [
-      "Lie down in a comfortable position",
-      "Starting with your toes, tense them for 5 seconds",
-      "Then release and feel the relaxation",
-      "Move up to your legs, then stomach, then arms",
-      "Tense and release each muscle group",
-      "End with your face and jaw",
-      "Notice how much lighter your body feels"
-    ]
-  },
-  {
-    icon: Leaf,
-    title: "Gratitude Practice",
-    description: "Notice three good things",
-    category: "Mindful",
-    color: "text-accent",
-    duration: "5 min",
-    instructions: [
-      "Think of 3 things from today (even tiny things)",
-      "Maybe your bed was comfortable",
-      "Or someone smiled at you",
-      "Or you ate something you enjoyed",
-      "Say them out loud or write them down",
-      "Really feel appreciation for each one",
-      "Small good things matter too"
-    ]
-  },
-  {
     icon: Sparkles,
     title: "Self-Compassion",
     description: "Be kind to yourself",
     category: "Mindful",
-    color: "text-primary",
     duration: "5-10 min",
-    instructions: [
+    steps: [
       "Put your hand on your heart",
       "Take a deep breath",
       "Say: 'I'm doing my best'",
@@ -261,28 +146,98 @@ const activities: Activity[] = [
     ]
   },
   {
-    icon: Smartphone,
-    title: "Digital Detox",
-    description: "Take a break from screens",
+    icon: Leaf,
+    title: "Gratitude Practice",
+    description: "Notice three good things",
     category: "Mindful",
-    color: "text-secondary",
-    duration: "30-60 min",
-    instructions: [
-      "Put your phone in another room",
-      "Set a timer for 30-60 minutes",
-      "Do something that doesn't involve a screen",
-      "Draw, read, walk, stretch, or just sit",
-      "Notice if you feel the urge to check your phone",
-      "That's normal - just notice it and let it pass",
-      "See how you feel after the break"
+    duration: "5 min",
+    steps: [
+      "Think of 3 things from today (even tiny things)",
+      "Maybe your bed was comfortable",
+      "Or someone smiled at you",
+      "Or you ate something you enjoyed",
+      "Say them out loud or write them down",
+      "Really feel appreciation for each one",
+      "Small good things matter too"
     ]
   },
+  {
+    icon: Heart,
+    title: "Gentle Stretching",
+    description: "Easy movements to release tension",
+    category: "Movement",
+    duration: "10 min",
+    hasAlternative: true,
+    steps: [
+      "Stand with feet hip-width apart",
+      "Reach arms overhead and stretch",
+      "Gently roll your shoulders back",
+      "Touch your toes (or knees)",
+      "Twist gently side to side",
+      "Roll your neck slowly",
+      "Take deep breaths throughout"
+    ],
+    alternative: {
+      title: "Dance It Out",
+      steps: [
+        "Put on your favorite upbeat song",
+        "Move your body however feels good",
+        "Don't worry about looking silly",
+        "Dance for at least one full song",
+        "Let loose and have fun!"
+      ]
+    }
+  },
+  {
+    icon: Mountain,
+    title: "Short Walk",
+    description: "Get outside, even for 10 minutes",
+    category: "Movement",
+    duration: "10-30 min",
+    hasAlternative: true,
+    steps: [
+      "Put on comfortable shoes",
+      "Step outside your door",
+      "Walk at a comfortable pace",
+      "Notice your surroundings",
+      "Take deep breaths of fresh air",
+      "Even 10 minutes counts!",
+      "Return when you're ready"
+    ],
+    alternative: {
+      title: "Window Observation",
+      steps: [
+        "If you can't go outside, that's okay!",
+        "Sit by a window",
+        "Watch the world go by for 10 minutes",
+        "Notice the sky, trees, people, weather",
+        "Take deep breaths while observing"
+      ]
+    }
+  },
+  {
+    icon: Waves,
+    title: "Progressive Relaxation",
+    description: "Release physical tension",
+    category: "Movement",
+    duration: "10-15 min",
+    steps: [
+      "Lie down in a comfortable position",
+      "Starting with your toes, tense them for 5 seconds",
+      "Then release and feel the relaxation",
+      "Move up to your legs, then stomach, then arms",
+      "Tense and release each muscle group",
+      "End with your face and jaw",
+      "Notice how much lighter your body feels"
+    ]
+  }
 ];
 
 const categories = Array.from(new Set(activities.map((a) => a.category)));
 
 export default function Activities() {
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+  const [showAlternative, setShowAlternative] = useState(false);
 
   return (
     <>
@@ -308,11 +263,14 @@ export default function Activities() {
                   <Card
                     key={activity.title}
                     className="hover:border-primary/50 transition-all cursor-pointer hover:shadow-lg group"
-                    onClick={() => setSelectedActivity(activity)}
+                    onClick={() => {
+                      setSelectedActivity(activity);
+                      setShowAlternative(false);
+                    }}
                   >
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between">
-                        <activity.icon className={`h-6 w-6 ${activity.color} group-hover:scale-110 transition-transform`} />
+                        <activity.icon className="h-6 w-6 text-primary group-hover:scale-110 transition-transform" />
                         <Badge variant="secondary" className="text-xs">
                           {activity.duration}
                         </Badge>
@@ -330,6 +288,23 @@ export default function Activities() {
             </div>
           </div>
         ))}
+
+        <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/30">
+          <CardContent className="pt-6">
+            <div className="flex items-start gap-4">
+              <BookOpen className="h-10 w-10 text-primary flex-shrink-0" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg mb-2">Need More Ideas?</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Keep track of what works for you in your private journal. Write down your thoughts, feelings, or create your own custom activities.
+                </p>
+                <Button asChild size="lg">
+                  <a href="/journal">Go to Journal</a>
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <Dialog open={!!selectedActivity} onOpenChange={() => setSelectedActivity(null)}>
@@ -338,9 +313,13 @@ export default function Activities() {
             <>
               <DialogHeader>
                 <div className="flex items-center gap-3 mb-2">
-                  <selectedActivity.icon className={`h-8 w-8 ${selectedActivity.color}`} />
+                  <selectedActivity.icon className="h-8 w-8 text-primary" />
                   <div className="flex-1">
-                    <DialogTitle className="text-2xl">{selectedActivity.title}</DialogTitle>
+                    <DialogTitle className="text-2xl">
+                      {showAlternative && selectedActivity.alternative 
+                        ? selectedActivity.alternative.title 
+                        : selectedActivity.title}
+                    </DialogTitle>
                     <DialogDescription className="text-base mt-1">
                       {selectedActivity.description}
                     </DialogDescription>
@@ -351,17 +330,28 @@ export default function Activities() {
 
               <div className="space-y-4 mt-4">
                 <div className="space-y-3">
-                  {selectedActivity.instructions.map((instruction, index) => (
+                  {(showAlternative && selectedActivity.alternative 
+                    ? selectedActivity.alternative.steps 
+                    : selectedActivity.steps).map((step, index) => (
                     <div key={index} className="flex gap-3 items-start">
                       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary">
                         {index + 1}
                       </div>
-                      <p className="pt-1 text-sm leading-relaxed">{instruction}</p>
+                      <p className="pt-1 text-sm leading-relaxed">{step}</p>
                     </div>
                   ))}
                 </div>
 
                 <div className="pt-4 border-t space-y-2">
+                  {selectedActivity.hasAlternative && (
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowAlternative(!showAlternative)}
+                      className="w-full"
+                    >
+                      {showAlternative ? "← Show Original Option" : "Try Option B →"}
+                    </Button>
+                  )}
                   <Button
                     onClick={() => setSelectedActivity(null)}
                     className="w-full"

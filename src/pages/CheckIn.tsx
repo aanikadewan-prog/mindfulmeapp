@@ -93,13 +93,29 @@ export default function CheckIn() {
 
   if (step === "complete") {
     const recommendations = getRecommendations();
+    const completedCount = Object.values(answers).filter(v => v === true).length;
+    
+    let title = "";
+    let description = "";
+    
+    if (completedCount === 4) {
+      title = "Amazing! You're taking great care of yourself! 🌟";
+      description = "Keep up these healthy habits";
+    } else if (completedCount >= 2) {
+      title = "Thanks for checking in! 💜";
+      description = "Here are some activities that might help";
+    } else {
+      title = "Thanks for being here 💜";
+      description = "Small steps count. Here are some gentle activities";
+    }
+    
     return (
       <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
         <Card className="border-primary/20 shadow-lg">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 text-6xl">✨</div>
-            <CardTitle className="text-2xl">You did great today!</CardTitle>
-            <CardDescription>Here are some activities that might help</CardDescription>
+            <CardTitle className="text-2xl">{title}</CardTitle>
+            <CardDescription>{description}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
