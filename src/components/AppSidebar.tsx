@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const items = [
-  { title: "Check-In", url: "/", icon: Home },
+  { title: "Home", url: "/", icon: Home },
   { title: "Journal", url: "/journal", icon: BookOpen },
   { title: "Progress", url: "/progress", icon: TrendingUp },
   { title: "Activities", url: "/activities", icon: Sparkles },

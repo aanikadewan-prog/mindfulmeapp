@@ -7,6 +7,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { CrisisFooter } from "@/components/CrisisFooter";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import Home from "./pages/Home";
 import CheckIn from "./pages/CheckIn";
 import Journal from "./pages/Journal";
 import Progress from "./pages/Progress";
@@ -42,7 +43,8 @@ const App = () => (
                 <div className="container py-8">
                   <Routes>
                     <Route path="/auth" element={<Auth />} />
-                    <Route path="/" element={<ProtectedRoute><CheckIn /></ProtectedRoute>} />
+                    <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                    <Route path="/check-in" element={<ProtectedRoute><CheckIn /></ProtectedRoute>} />
                     <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />
                     <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
                     <Route path="/activities" element={<ProtectedRoute><Activities /></ProtectedRoute>} />
