@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Heart, Wind, Music, Coffee, Mountain, Sunrise, Moon, Waves, Leaf, Sparkles, BookOpen } from "lucide-react";
+import { Heart, Wind, Music, Coffee, Mountain, Sunrise, Moon, Waves, Leaf, Sparkles, BookOpen, Smartphone } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -230,6 +230,62 @@ const activities: Activity[] = [
       "End with your face and jaw",
       "Notice how much lighter your body feels"
     ]
+  },
+  {
+    icon: Smartphone,
+    title: "Phone-Free Hour",
+    description: "Take a mindful break from your phone",
+    category: "Digital Wellness",
+    duration: "60 min",
+    hasAlternative: true,
+    steps: [
+      "Choose a time when you don't need your phone",
+      "Turn it off or put it in another room",
+      "Set a gentle timer (not on your phone!)",
+      "Do something you enjoy offline",
+      "Notice if you feel the urge to check it - that's totally normal",
+      "Sit with that feeling for a moment",
+      "See how you feel after the hour"
+    ],
+    alternative: {
+      title: "30-Minute Reset",
+      steps: [
+        "Start with just 30 minutes if an hour feels too long",
+        "Put your phone on airplane mode",
+        "Keep it out of reach",
+        "Do a calming activity (read, draw, walk)",
+        "Notice how it feels to be unplugged",
+        "You're not missing out - you're taking care of yourself"
+      ]
+    }
+  },
+  {
+    icon: Sparkles,
+    title: "Social Media Pause",
+    description: "Gentle break from scrolling",
+    category: "Digital Wellness",
+    duration: "varies",
+    hasAlternative: true,
+    steps: [
+      "Pick one app to take a break from today",
+      "Log out of it (not delete - just log out)",
+      "Notice when you automatically reach for it",
+      "That's not bad - it's just a habit",
+      "When you notice, try one of the mindful activities instead",
+      "See how you feel at the end of the day",
+      "You can always log back in - this is just an experiment"
+    ],
+    alternative: {
+      title: "Set Time Limits",
+      steps: [
+        "Use your phone's built-in timer for social apps",
+        "Set it to 30 minutes per app per day",
+        "When the time's up, take a 5-minute break",
+        "Do some stretches or breathing",
+        "This isn't about restriction - it's about awareness",
+        "You're learning what works for you"
+      ]
+    }
   }
 ];
 

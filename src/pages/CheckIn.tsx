@@ -134,8 +134,21 @@ export default function CheckIn() {
                 onClick={() => navigate("/activities")}
                 className="w-full"
               >
-                Explore All Activities
+                Explore Activities
               </Button>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                {recommendations.slice(0, 4).map((rec) => (
+                  <Button
+                    key={rec}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate("/activities")}
+                    className="text-xs"
+                  >
+                    {rec}
+                  </Button>
+                ))}
+              </div>
               <Button
                 onClick={() => navigate("/journal")}
                 variant="outline"

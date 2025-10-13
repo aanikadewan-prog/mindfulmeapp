@@ -1,5 +1,7 @@
-import { Home, BookOpen, TrendingUp, Sparkles, Heart } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { Home, BookOpen, TrendingUp, Sparkles, Heart, LogOut } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import {
   Sidebar,
   SidebarContent,
@@ -22,6 +24,25 @@ const items = [
 
 export function AppSidebar() {
   const { open } = useSidebar();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to log out",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "See you soon! 💜",
+        description: "You've been logged out",
+      });
+      navigate("/auth");
+    }
+  };
 
   return (
     <Sidebar className={open ? "w-60" : "w-16"} collapsible="icon">
@@ -52,6 +73,18 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all bg-sidebar-accent/50 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-full"
+                  >
+                    <LogOut className="h-5 w-5 flex-shrink-0" />
+                    {open && <span>Log Out</span>}
+                  </button>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
