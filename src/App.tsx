@@ -21,12 +21,21 @@ import SelfCompassion from "./pages/SelfCompassion";
 import PhoneFreeHour from "./pages/PhoneFreeHour";
 import SocialMediaPause from "./pages/SocialMediaPause";
 import CleanCounter from "./pages/CleanCounter";
+import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import { useEffect } from "react";
+import { initializeNotifications } from "./utils/notifications";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  useEffect(() => {
+    // Initialize notifications on app load
+    initializeNotifications();
+  }, []);
+
+  return (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
@@ -65,6 +74,7 @@ const App = () => (
                     <Route path="/phone-free" element={<ProtectedRoute><PhoneFreeHour /></ProtectedRoute>} />
                     <Route path="/social-pause" element={<ProtectedRoute><SocialMediaPause /></ProtectedRoute>} />
                     <Route path="/clean" element={<ProtectedRoute><CleanCounter /></ProtectedRoute>} />
+                    <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </div>
@@ -76,6 +86,7 @@ const App = () => (
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

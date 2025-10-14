@@ -1,4 +1,4 @@
-import { Home, BookOpen, TrendingUp, Sparkles, Heart, LogOut } from "lucide-react";
+import { Home, BookOpen, TrendingUp, Sparkles, Heart, LogOut, Settings } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -20,6 +20,7 @@ const items = [
   { title: "Progress", url: "/progress", icon: TrendingUp },
   { title: "Activities", url: "/activities", icon: Sparkles },
   { title: "Clean Counter", url: "/clean", icon: Heart },
+  { title: "Settings", url: "/settings", icon: Settings },
 ];
 
 export function AppSidebar() {

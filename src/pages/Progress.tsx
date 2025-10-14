@@ -113,61 +113,61 @@ export default function Progress() {
   const insights = getMoodInsights();
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+    <div className="max-w-5xl mx-auto space-y-6 animate-fade-in">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="bg-gradient-to-br from-secondary/20 to-secondary/5 border-secondary/30 hover:shadow-lg transition-all">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Current Streak</CardTitle>
-            <Flame className="h-4 w-4 text-secondary" />
+            <Flame className="h-5 w-5 text-secondary" />
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-bold text-primary">{streak}</div>
-            <p className="text-xs text-muted-foreground mt-1">days in a row</p>
+            <div className="text-5xl font-bold bg-gradient-to-br from-secondary to-accent bg-clip-text text-transparent">{streak}</div>
+            <p className="text-xs text-muted-foreground mt-1">days in a row 🔥</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gradient-to-br from-primary/20 to-primary/5 border-primary/30 hover:shadow-lg transition-all">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Check-Ins</CardTitle>
-            <Calendar className="h-4 w-4 text-accent" />
+            <Calendar className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-bold text-primary">{checkIns.length}</div>
+            <div className="text-5xl font-bold text-primary">{checkIns.length}</div>
             <p className="text-xs text-muted-foreground mt-1">wellness check-ins</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gradient-to-br from-accent/20 to-accent/5 border-accent/30 hover:shadow-lg transition-all">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Average Mood</CardTitle>
-            <TrendingUp className="h-4 w-4 text-primary" />
+            <TrendingUp className="h-5 w-5 text-accent" />
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-bold text-primary">{getAverageMood()}</div>
-            <p className="text-xs text-muted-foreground mt-1">out of 5</p>
+            <div className="text-5xl font-bold text-accent">{getAverageMood()}</div>
+            <p className="text-xs text-muted-foreground mt-1">out of 5 ⭐</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gradient-to-br from-primary/15 via-secondary/15 to-accent/15 border-primary/30 hover:shadow-lg transition-all">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Achievements</CardTitle>
-            <Award className="h-4 w-4 text-secondary" />
+            <Award className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-bold text-primary">{achievements.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">milestones unlocked</p>
+            <div className="text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">{achievements.length}</div>
+            <p className="text-xs text-muted-foreground mt-1">milestones unlocked 🏆</p>
           </CardContent>
         </Card>
       </div>
 
       {chartData.length > 0 && (
-        <Card>
-          <CardHeader>
+        <Card className="border-primary/30 shadow-lg">
+          <CardHeader className="bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-accent" />
-              <CardTitle>Mood Patterns</CardTitle>
+              <TrendingUp className="h-6 w-6 text-primary" />
+              <CardTitle className="text-xl">Mood Patterns</CardTitle>
             </div>
-            <CardDescription>
+            <CardDescription className="text-base">
               See how your habits affect your mood over time. This helps you understand what works for you.
             </CardDescription>
           </CardHeader>
@@ -207,12 +207,12 @@ export default function Progress() {
             </ResponsiveContainer>
 
             {insights && (
-              <div className="mt-6 p-4 bg-accent/10 rounded-lg border border-accent/30">
+              <div className="mt-6 p-5 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-xl border-2 border-accent/30">
                 <div className="flex items-start gap-3">
-                  <Heart className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                  <Heart className="h-6 w-6 text-accent flex-shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="font-semibold text-sm mb-1">Pattern Insight</h4>
-                    <p className="text-sm text-muted-foreground">{insights}</p>
+                    <h4 className="font-semibold text-base mb-2">Pattern Insight</h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{insights}</p>
                   </div>
                 </div>
               </div>
@@ -221,10 +221,10 @@ export default function Progress() {
         </Card>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Milestones & Achievements</CardTitle>
-          <CardDescription>Celebrating your journey</CardDescription>
+      <Card className="border-primary/30 shadow-lg">
+        <CardHeader className="bg-gradient-to-br from-primary/5 to-secondary/5">
+          <CardTitle className="text-xl">Milestones & Achievements</CardTitle>
+          <CardDescription>Celebrating your journey - every step counts!</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           {milestones.map((milestone) => {
@@ -232,22 +232,22 @@ export default function Progress() {
             return (
               <div
                 key={milestone.days}
-                className={`p-4 rounded-lg border transition-all ${
+                className={`p-5 rounded-xl border-2 transition-all hover:scale-[1.02] ${
                   isUnlocked
-                    ? "bg-primary/5 border-primary/30"
+                    ? "bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/40 shadow-md"
                     : "bg-muted/30 border-border opacity-60"
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl">{milestone.emoji}</span>
+                <div className="flex items-center gap-4">
+                  <span className="text-4xl">{milestone.emoji}</span>
                   <div className="flex-1">
-                    <h4 className="font-semibold">{milestone.title}</h4>
+                    <h4 className="font-semibold text-lg">{milestone.title}</h4>
                     <p className="text-sm text-muted-foreground">{milestone.message}</p>
                   </div>
                   {isUnlocked ? (
-                    <Badge variant="secondary">Unlocked! ✨</Badge>
+                    <Badge className="text-sm py-1 px-3">Unlocked! ✨</Badge>
                   ) : (
-                    <Badge variant="outline">{milestone.days} days</Badge>
+                    <Badge variant="outline" className="text-sm">{milestone.days} days</Badge>
                   )}
                 </div>
               </div>
@@ -257,20 +257,20 @@ export default function Progress() {
       </Card>
 
       {checkIns.length > 0 && (
-        <Card>
+        <Card className="border-accent/30">
           <CardHeader>
-            <CardTitle>Recent Check-Ins</CardTitle>
+            <CardTitle className="text-xl">Recent Check-Ins</CardTitle>
             <CardDescription>Your mood over the past week</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-3">
               {getRecentCheckIns().map((checkIn, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center gap-1 p-2 rounded-lg bg-muted/50"
+                  className="flex flex-col items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-muted/50 to-accent/5 hover:scale-105 transition-transform border border-accent/20"
                 >
-                  <span className="text-2xl">{getMoodEmoji(checkIn.mood)}</span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-3xl">{getMoodEmoji(checkIn.mood)}</span>
+                  <span className="text-xs text-muted-foreground font-medium">
                     {new Date(checkIn.date).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",

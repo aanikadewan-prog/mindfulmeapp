@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { BookOpen, Sparkles } from "lucide-react";
+import { BookOpen, Sparkles, Pen, Calendar, Heart } from "lucide-react";
 
 const prompts = [
   "What made you smile today?",
@@ -77,70 +77,156 @@ export default function Journal() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
-      <Card>
-        <CardHeader>
+      {/* Stats Header */}
+      <div className="grid gap-4 md:grid-cols-3">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-full bg-primary/20">
+                <Pen className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{entries.length}</p>
+                <p className="text-xs text-muted-foreground">Total Entries</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-secondary/10 to-secondary/5">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-full bg-secondary/20">
+                <Calendar className="h-6 w-6 text-secondary" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">
+                  {entries.length > 0 ? Math.floor((Date.now() - new Date(entries[entries.length - 1].date).getTime()) / (1000 * 60 * 60 * 24)) : 0}
+                </p>
+                <p className="text-xs text-muted-foreground">Days Journaling</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-full bg-accent/20">
+                <Heart className="h-6 w-6 text-accent" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">
+                  {entries.length > 0 && entries.filter(e => {
+                    const entryDate = new Date(e.date);
+                    const now = new Date();
+                    return entryDate.getMonth() === now.getMonth() && entryDate.getFullYear() === now.getFullYear();
+                  }).length}
+                </p>
+                <p className="text-xs text-muted-foreground">This Month</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="border-primary/30 shadow-lg">
+        <CardHeader className="bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
           <div className="flex items-center gap-2 mb-2">
-            <BookOpen className="h-5 w-5 text-primary" />
-            <CardTitle>Your Private Journal</CardTitle>
+            <BookOpen className="h-6 w-6 text-primary" />
+            <CardTitle className="text-2xl">Your Private Journal</CardTitle>
           </div>
-          <CardDescription>
+          <CardDescription className="text-base">
             A safe space for your thoughts. Everything stays on your device.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-start gap-2 p-4 bg-primary/5 rounded-lg border border-primary/20">
-            <Sparkles className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-            <div className="space-y-1 flex-1">
-              <p className="text-sm font-medium">Today's prompt:</p>
-              <p className="text-sm text-muted-foreground">{selectedPrompt}</p>
+          <div className="relative flex items-start gap-3 p-5 bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 rounded-xl border-2 border-primary/30 shadow-sm">
+            <div className="absolute top-2 right-2">
+              <div className="animate-pulse">
+                <Sparkles className="h-5 w-5 text-primary" />
+              </div>
+            </div>
+            <Sparkles className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
+            <div className="space-y-2 flex-1">
+              <p className="text-sm font-semibold text-primary">Today's Writing Prompt:</p>
+              <p className="text-base text-foreground leading-relaxed">{selectedPrompt}</p>
             </div>
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={() => setSelectedPrompt(prompts[Math.floor(Math.random() * prompts.length)])}
+              className="hover:bg-primary/10"
             >
-              New
+              ✨ New
             </Button>
           </div>
 
-          <Textarea
-            placeholder="Start writing..."
-            value={currentEntry}
-            onChange={(e) => setCurrentEntry(e.target.value)}
-            className="min-h-[200px] resize-none"
-          />
+          <div className="relative">
+            <Textarea
+              placeholder="Let your thoughts flow freely... Write whatever comes to mind. This is your safe space."
+              value={currentEntry}
+              onChange={(e) => setCurrentEntry(e.target.value)}
+              className="min-h-[250px] resize-none text-base leading-relaxed border-2 focus:border-primary/50 transition-colors"
+            />
+            <div className="absolute bottom-3 right-3 text-xs text-muted-foreground">
+              {currentEntry.length} characters
+            </div>
+          </div>
 
-          <Button onClick={saveEntry} className="w-full">
+          <Button onClick={saveEntry} className="w-full" size="lg">
+            <Pen className="h-4 w-4 mr-2" />
             Save Entry
           </Button>
         </CardContent>
       </Card>
 
       {entries.length > 0 && (
-        <Card>
+        <Card className="border-primary/20">
           <CardHeader>
-            <CardTitle className="text-lg">Past Entries</CardTitle>
-            <CardDescription>Reflecting on your journey</CardDescription>
+            <CardTitle className="text-xl flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-primary" />
+              Past Entries
+            </CardTitle>
+            <CardDescription>Reflecting on your journey - {entries.length} {entries.length === 1 ? 'entry' : 'entries'}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {entries.map((entry, index) => (
               <div
                 key={index}
-                className="p-4 bg-card border rounded-lg space-y-2 hover:border-primary/30 transition-colors"
+                className="p-5 bg-gradient-to-br from-card to-muted/20 border-2 rounded-xl space-y-3 hover:border-primary/40 hover:shadow-md transition-all duration-300 animate-fade-in"
+                style={{ animationDelay: `${index * 50}ms` }}
               >
-                <div className="flex items-center justify-between">
-                  <Badge variant="outline" className="text-xs">
-                    {formatDate(entry.date)}
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <Badge variant="secondary" className="text-xs font-medium">
+                    📅 {formatDate(entry.date)}
                   </Badge>
                   {entry.prompt && (
-                    <span className="text-xs text-muted-foreground italic">
-                      "{entry.prompt}"
-                    </span>
+                    <div className="flex items-center gap-1">
+                      <Sparkles className="h-3 w-3 text-primary" />
+                      <span className="text-xs text-muted-foreground italic max-w-xs truncate">
+                        {entry.prompt}
+                      </span>
+                    </div>
                   )}
                 </div>
-                <p className="text-sm whitespace-pre-wrap">{entry.content}</p>
+                <div className="pl-3 border-l-4 border-primary/30">
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground/90">{entry.content}</p>
+                </div>
               </div>
             ))}
+          </CardContent>
+        </Card>
+      )}
+
+      {entries.length === 0 && (
+        <Card className="bg-gradient-to-br from-muted/50 to-accent/10 border-dashed border-2">
+          <CardContent className="pt-12 pb-12 text-center">
+            <BookOpen className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Your Journal Awaits</h3>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              Start writing your first entry above. This is your private space to express yourself freely.
+            </p>
           </CardContent>
         </Card>
       )}
