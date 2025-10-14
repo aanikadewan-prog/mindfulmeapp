@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -292,8 +293,18 @@ const activities: Activity[] = [
 const categories = Array.from(new Set(activities.map((a) => a.category)));
 
 export default function Activities() {
+  const navigate = useNavigate();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [showAlternative, setShowAlternative] = useState(false);
+
+  const handleActivityClick = (activity: Activity) => {
+    if (activity.title === "Breathing Exercise") {
+      navigate("/breathing");
+    } else {
+      setSelectedActivity(activity);
+      setShowAlternative(false);
+    }
+  };
 
   return (
     <>
@@ -319,10 +330,7 @@ export default function Activities() {
                   <Card
                     key={activity.title}
                     className="hover:border-primary/50 transition-all cursor-pointer hover:shadow-lg group"
-                    onClick={() => {
-                      setSelectedActivity(activity);
-                      setShowAlternative(false);
-                    }}
+                    onClick={() => handleActivityClick(activity)}
                   >
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between">

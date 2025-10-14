@@ -12,6 +12,7 @@ import CheckIn from "./pages/CheckIn";
 import Journal from "./pages/Journal";
 import Progress from "./pages/Progress";
 import Activities from "./pages/Activities";
+import BreathingTimer from "./pages/BreathingTimer";
 import CleanCounter from "./pages/CleanCounter";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -48,6 +49,7 @@ const App = () => (
                     <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />
                     <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
                     <Route path="/activities" element={<ProtectedRoute><Activities /></ProtectedRoute>} />
+                    <Route path="/breathing" element={<ProtectedRoute><BreathingTimer /></ProtectedRoute>} />
                     <Route path="/clean" element={<ProtectedRoute><CleanCounter /></ProtectedRoute>} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
