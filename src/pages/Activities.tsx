@@ -298,8 +298,18 @@ export default function Activities() {
   const [showAlternative, setShowAlternative] = useState(false);
 
   const handleActivityClick = (activity: Activity) => {
-    if (activity.title === "Breathing Exercise") {
-      navigate("/breathing");
+    // Route to dedicated pages for enhanced activities
+    const routeMap: Record<string, string> = {
+      "Breathing Exercise": "/breathing",
+      "Soothing Sounds": "/sounds",
+      "Mindful Tea": "/tea",
+      "Morning Ritual": "/morning",
+      "Gratitude Practice": "/gratitude"
+    };
+
+    const route = routeMap[activity.title];
+    if (route) {
+      navigate(route);
     } else {
       setSelectedActivity(activity);
       setShowAlternative(false);

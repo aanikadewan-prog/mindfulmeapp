@@ -13,6 +13,10 @@ import Journal from "./pages/Journal";
 import Progress from "./pages/Progress";
 import Activities from "./pages/Activities";
 import BreathingTimer from "./pages/BreathingTimer";
+import SoothingSounds from "./pages/SoothingSounds";
+import MindfulTea from "./pages/MindfulTea";
+import MorningRitual from "./pages/MorningRitual";
+import GratitudePractice from "./pages/GratitudePractice";
 import CleanCounter from "./pages/CleanCounter";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -50,6 +54,10 @@ const App = () => (
                     <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
                     <Route path="/activities" element={<ProtectedRoute><Activities /></ProtectedRoute>} />
                     <Route path="/breathing" element={<ProtectedRoute><BreathingTimer /></ProtectedRoute>} />
+                    <Route path="/sounds" element={<ProtectedRoute><SoothingSounds /></ProtectedRoute>} />
+                    <Route path="/tea" element={<ProtectedRoute><MindfulTea /></ProtectedRoute>} />
+                    <Route path="/morning" element={<ProtectedRoute><MorningRitual /></ProtectedRoute>} />
+                    <Route path="/gratitude" element={<ProtectedRoute><GratitudePractice /></ProtectedRoute>} />
                     <Route path="/clean" element={<ProtectedRoute><CleanCounter /></ProtectedRoute>} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
