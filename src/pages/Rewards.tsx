@@ -1,6 +1,9 @@
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Gift, Sparkles, Trophy } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 const rewardSuggestions = [
   {
@@ -50,6 +53,84 @@ const personalizedIdeas = [
 ];
 
 export default function Rewards() {
+  const { toast } = useToast();
+  const [currentStreak, setCurrentStreak] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const calculateStreak = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          setIsLoading(false);
+          return;
+        }
+
+        // Get all activity completions ordered by date
+        const { data: completions, error } = await supabase
+          .from('activity_completions')
+          .select('completed_at')
+          .eq('user_id', user.id)
+          .order('completed_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!completions || completions.length === 0) {
+          setCurrentStreak(0);
+          setIsLoading(false);
+          return;
+        }
+
+        // Calculate consecutive days
+        let streak = 0;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        const uniqueDates = new Set(
+          completions.map(c => new Date(c.completed_at).toDateString())
+        );
+        
+        let currentDate = new Date(today);
+        
+        // Check if there's activity today or yesterday (to not break streak)
+        const hasActivityToday = uniqueDates.has(currentDate.toDateString());
+        currentDate.setDate(currentDate.getDate() - 1);
+        const hasActivityYesterday = uniqueDates.has(currentDate.toDateString());
+        
+        if (!hasActivityToday && !hasActivityYesterday) {
+          setCurrentStreak(0);
+          setIsLoading(false);
+          return;
+        }
+        
+        // Start counting from today or yesterday
+        currentDate = new Date(today);
+        if (!hasActivityToday) {
+          currentDate.setDate(currentDate.getDate() - 1);
+        }
+        
+        // Count consecutive days backwards
+        while (uniqueDates.has(currentDate.toDateString())) {
+          streak++;
+          currentDate.setDate(currentDate.getDate() - 1);
+        }
+        
+        setCurrentStreak(streak);
+      } catch (error) {
+        console.error('Error calculating streak:', error);
+        toast({
+          title: "Error",
+          description: "Failed to calculate your streak",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    calculateStreak();
+  }, [toast]);
+
   return (
     <div className="max-w-6xl mx-auto space-y-8 animate-fade-in pb-8">
       {/* Header */}
@@ -61,6 +142,12 @@ export default function Rewards() {
         <p className="text-lg text-muted-foreground">
           Celebrate your progress with meaningful rewards
         </p>
+        {!isLoading && (
+          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/20">
+            <Trophy className="h-5 w-5 text-primary" />
+            <span className="text-lg font-semibold">Current Streak: {currentStreak} days</span>
+          </div>
+        )}
       </div>
 
       {/* Info Card */}
@@ -82,7 +169,7 @@ export default function Rewards() {
       {/* Reward Suggestions Grid */}
       <div className="grid gap-6 md:grid-cols-2">
         {rewardSuggestions.map((reward, index) => {
-          const isLocked = false; // Replace with actual unlock logic based on user streak
+          const isLocked = currentStreak < reward.days;
           return (
             <Card 
               key={index}
