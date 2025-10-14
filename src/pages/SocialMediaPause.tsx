@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Sparkles, Instagram, Facebook, Hash, Youtube, MessageCircle, TrendingUp } from "lucide-react";
+import { ArrowLeft, Sparkles, Instagram, Facebook, Hash, Youtube, Video, Camera, TrendingUp, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -18,10 +18,10 @@ interface SocialApp {
 const defaultApps: SocialApp[] = [
   { id: "instagram", name: "Instagram", icon: Instagram, color: "from-pink-500 to-purple-500", isPaused: false },
   { id: "facebook", name: "Facebook", icon: Facebook, color: "from-blue-600 to-blue-400", isPaused: false },
-  { id: "twitter", name: "X (Twitter)", icon: Hash, color: "from-gray-800 to-gray-600", isPaused: false },
+  { id: "twitter", name: "X", icon: Hash, color: "from-gray-900 to-gray-700", isPaused: false },
   { id: "youtube", name: "YouTube", icon: Youtube, color: "from-red-600 to-red-400", isPaused: false },
-  { id: "tiktok", name: "TikTok", icon: MessageCircle, color: "from-gray-800 to-cyan-400", isPaused: false },
-  { id: "snapchat", name: "Snapchat", icon: MessageCircle, color: "from-yellow-400 to-yellow-300", isPaused: false }
+  { id: "tiktok", name: "TikTok", icon: Video, color: "from-black via-cyan-400 to-pink-400", isPaused: false },
+  { id: "snapchat", name: "Snapchat", icon: Camera, color: "from-yellow-400 to-yellow-300", isPaused: false }
 ];
 
 export default function SocialMediaPause() {
@@ -87,6 +87,23 @@ export default function SocialMediaPause() {
           </div>
         </CardHeader>
         <CardContent className="space-y-8 pb-8">
+          {/* How It Works Explanation */}
+          <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border-blue-200 dark:border-blue-800">
+            <CardContent className="pt-6">
+              <div className="flex items-start gap-3">
+                <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                <div className="space-y-2">
+                  <h4 className="font-semibold text-blue-900 dark:text-blue-100">How This Works</h4>
+                  <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+                    This is a <strong>self-tracking tool</strong>, not an actual blocker. Checking an app as "paused" is a reminder to yourself to take a break from it. 
+                    The app won't actually block these apps - you're building awareness and making conscious choices about your social media use. 
+                    It's about mindfulness, not restriction.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Progress */}
           <Card className="bg-gradient-to-br from-primary/10 to-secondary/10">
             <CardContent className="pt-6">
