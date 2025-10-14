@@ -206,8 +206,8 @@ export default function BreathingTimer() {
                         </p>
                         <iframe
                           className="w-full h-40 rounded-lg"
-                          src="https://www.youtube.com/embed/8VfjR5RAXVM"
-                          title="20 Minute Deep Meditation"
+                          src="https://www.youtube.com/embed/inpok4MKVLM"
+                          title="Deepak Chopra Guided Meditation"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
                         />
