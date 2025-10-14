@@ -19,42 +19,42 @@ const sounds: Sound[] = [
     name: "Gentle Rain",
     emoji: "🌧️",
     description: "Soft rainfall on leaves",
-    url: "https://assets.mixkit.co/active_storage/sfx/2393/2393-preview.mp3"
+    url: "https://www.soundjay.com/nature/sounds/rain-01.mp3"
   },
   {
     id: "ocean",
     name: "Ocean Waves",
     emoji: "🌊",
     description: "Calming waves on the shore",
-    url: "https://assets.mixkit.co/active_storage/sfx/2487/2487-preview.mp3"
+    url: "https://www.soundjay.com/nature/sounds/ocean-waves-1.mp3"
   },
   {
     id: "forest",
     name: "Forest Birds",
     emoji: "🌲",
     description: "Morning birds chirping",
-    url: "https://assets.mixkit.co/active_storage/sfx/2462/2462-preview.mp3"
+    url: "https://www.soundjay.com/nature/sounds/birds-chirping-1.mp3"
   },
   {
     id: "fire",
     name: "Crackling Fire",
     emoji: "🔥",
     description: "Warm fireplace ambience",
-    url: "https://assets.mixkit.co/active_storage/sfx/2377/2377-preview.mp3"
+    url: "https://www.soundjay.com/nature/sounds/fire-burning-1.mp3"
   },
   {
     id: "wind",
     name: "Gentle Wind",
     emoji: "🍃",
     description: "Wind through trees",
-    url: "https://assets.mixkit.co/active_storage/sfx/2499/2499-preview.mp3"
+    url: "https://www.soundjay.com/nature/sounds/wind-blowing-1.mp3"
   },
   {
     id: "stream",
     name: "Flowing Stream",
     emoji: "💧",
     description: "Babbling brook sounds",
-    url: "https://assets.mixkit.co/active_storage/sfx/2520/2520-preview.mp3"
+    url: "https://www.soundjay.com/nature/sounds/water-stream-1.mp3"
   }
 ];
 
