@@ -67,34 +67,12 @@ export default function Vent() {
   };
 
   const transcribeAudio = async (audioBlob: Blob) => {
-    setIsLoading(true);
-    try {
-      const reader = new FileReader();
-      reader.readAsDataURL(audioBlob);
-      reader.onloadend = async () => {
-        const base64Audio = (reader.result as string).split(',')[1];
-        
-        const { data, error } = await supabase.functions.invoke('transcribe-audio', {
-          body: { audio: base64Audio }
-        });
-
-        if (error) throw error;
-        
-        if (data?.text) {
-          setInput(data.text);
-          await sendMessage(data.text);
-        }
-      };
-    } catch (error) {
-      console.error("Error transcribing:", error);
-      toast({
-        title: "Couldn't understand that",
-        description: "Try speaking again or type instead",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    // Voice transcription temporarily unavailable
+    toast({
+      title: "Voice input coming soon!",
+      description: "For now, please type your message 💜",
+    });
+    setIsRecording(false);
   };
 
   const sendMessage = async (messageText?: string) => {
@@ -119,9 +97,6 @@ export default function Vent() {
       if (data?.reply) {
         const assistantMessage: Message = { role: "assistant", content: data.reply };
         setMessages(prev => [...prev, assistantMessage]);
-        
-        // Auto-play response
-        await speakText(data.reply);
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -136,33 +111,8 @@ export default function Vent() {
   };
 
   const speakText = async (text: string) => {
-    setIsSpeaking(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('text-to-speech', {
-        body: { text }
-      });
-
-      if (error) throw error;
-
-      if (data?.audioContent) {
-        const audioBlob = new Blob(
-          [Uint8Array.from(atob(data.audioContent), c => c.charCodeAt(0))],
-          { type: 'audio/mp3' }
-        );
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audio = new Audio(audioUrl);
-        
-        audio.onended = () => {
-          setIsSpeaking(false);
-          URL.revokeObjectURL(audioUrl);
-        };
-        
-        await audio.play();
-      }
-    } catch (error) {
-      console.error("Error with text-to-speech:", error);
-      setIsSpeaking(false);
-    }
+    // Text-to-speech temporarily unavailable
+    setIsSpeaking(false);
   };
 
   return (

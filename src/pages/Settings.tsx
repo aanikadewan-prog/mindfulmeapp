@@ -16,10 +16,14 @@ import {
 
 export default function Settings() {
   const [settings, setSettings] = useState<NotificationSettingsType>(getNotificationSettings());
-  const [notificationPermission, setNotificationPermission] = useState(Notification.permission);
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>(
+    typeof window !== 'undefined' && 'Notification' in window ? Notification.permission : 'default'
+  );
 
   useEffect(() => {
-    setNotificationPermission(Notification.permission);
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      setNotificationPermission(Notification.permission);
+    }
   }, []);
 
   const handleToggleNotifications = async (enabled: boolean) => {
