@@ -11,7 +11,7 @@ const moods = [
   { emoji: "😊", label: "Great", value: 5, color: "bg-accent" },
   { emoji: "🙂", label: "Good", value: 4, color: "bg-primary/70" },
   { emoji: "😐", label: "Okay", value: 3, color: "bg-muted" },
-  { emoji: "😔", label: "Low", value: 2, color: "bg-secondary/70" },
+  { emoji: "😔", label: "Not great", value: 2, color: "bg-secondary/70" },
   { emoji: "😢", label: "Struggling", value: 1, color: "bg-destructive/70" },
 ];
 
