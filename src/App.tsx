@@ -17,6 +17,9 @@ import SoothingSounds from "./pages/SoothingSounds";
 import MindfulTea from "./pages/MindfulTea";
 import MorningRitual from "./pages/MorningRitual";
 import GratitudePractice from "./pages/GratitudePractice";
+import SelfCompassion from "./pages/SelfCompassion";
+import PhoneFreeHour from "./pages/PhoneFreeHour";
+import SocialMediaPause from "./pages/SocialMediaPause";
 import CleanCounter from "./pages/CleanCounter";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -58,6 +61,9 @@ const App = () => (
                     <Route path="/tea" element={<ProtectedRoute><MindfulTea /></ProtectedRoute>} />
                     <Route path="/morning" element={<ProtectedRoute><MorningRitual /></ProtectedRoute>} />
                     <Route path="/gratitude" element={<ProtectedRoute><GratitudePractice /></ProtectedRoute>} />
+                    <Route path="/self-compassion" element={<ProtectedRoute><SelfCompassion /></ProtectedRoute>} />
+                    <Route path="/phone-free" element={<ProtectedRoute><PhoneFreeHour /></ProtectedRoute>} />
+                    <Route path="/social-pause" element={<ProtectedRoute><SocialMediaPause /></ProtectedRoute>} />
                     <Route path="/clean" element={<ProtectedRoute><CleanCounter /></ProtectedRoute>} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
