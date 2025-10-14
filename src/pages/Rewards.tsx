@@ -66,53 +66,36 @@ export default function Rewards() {
           return;
         }
 
-        // Get all activity completions ordered by date
-        const { data: completions, error } = await supabase
-          .from('activity_completions')
-          .select('completed_at')
+        // Fetch check-ins from database (matching Progress.tsx logic)
+        const { data: dbCheckIns, error } = await supabase
+          .from('check_ins')
+          .select('created_at')
           .eq('user_id', user.id)
-          .order('completed_at', { ascending: false });
+          .order('created_at', { ascending: false });
 
         if (error) throw error;
 
-        if (!completions || completions.length === 0) {
+        if (!dbCheckIns || dbCheckIns.length === 0) {
           setCurrentStreak(0);
           setIsLoading(false);
           return;
         }
 
-        // Calculate consecutive days
+        // Calculate streak (matching Progress.tsx logic)
         let streak = 0;
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        
-        const uniqueDates = new Set(
-          completions.map(c => new Date(c.completed_at).toDateString())
-        );
-        
-        let currentDate = new Date(today);
-        
-        // Check if there's activity today or yesterday (to not break streak)
-        const hasActivityToday = uniqueDates.has(currentDate.toDateString());
-        currentDate.setDate(currentDate.getDate() - 1);
-        const hasActivityYesterday = uniqueDates.has(currentDate.toDateString());
-        
-        if (!hasActivityToday && !hasActivityYesterday) {
-          setCurrentStreak(0);
-          setIsLoading(false);
-          return;
-        }
-        
-        // Start counting from today or yesterday
-        currentDate = new Date(today);
-        if (!hasActivityToday) {
-          currentDate.setDate(currentDate.getDate() - 1);
-        }
-        
-        // Count consecutive days backwards
-        while (uniqueDates.has(currentDate.toDateString())) {
-          streak++;
-          currentDate.setDate(currentDate.getDate() - 1);
+        if (dbCheckIns.length > 0) {
+          streak = 1;
+          const dates = dbCheckIns.map(c => new Date(c.created_at).toDateString());
+          for (let i = 1; i < dates.length; i++) {
+            const prevDate = new Date(dates[i-1]);
+            const currDate = new Date(dates[i]);
+            const diffDays = Math.floor((prevDate.getTime() - currDate.getTime()) / (1000 * 60 * 60 * 24));
+            if (diffDays === 1) {
+              streak++;
+            } else {
+              break;
+            }
+          }
         }
         
         setCurrentStreak(streak);
