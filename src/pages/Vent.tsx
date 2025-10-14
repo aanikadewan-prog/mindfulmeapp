@@ -51,8 +51,9 @@ export default function Vent() {
   const loadConversations = async () => {
     const { data, error } = await supabase
       .from('vent_conversations')
-      .select('*')
-      .order('updated_at', { ascending: false });
+      .select('id, title, created_at, updated_at')
+      .order('updated_at', { ascending: false })
+      .limit(20);
     
     if (!error && data) {
       setConversations(data);
@@ -62,7 +63,7 @@ export default function Vent() {
   const loadConversation = async (conversationId: string) => {
     const { data, error } = await supabase
       .from('vent_messages')
-      .select('*')
+      .select('role, content, created_at')
       .eq('conversation_id', conversationId)
       .order('created_at', { ascending: true });
     
