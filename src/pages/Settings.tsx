@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Clock, Moon, Sun, Settings as SettingsIcon } from "lucide-react";
+import { Bell, Clock, Moon, Sun, Settings as SettingsIcon, Palette, Monitor } from "lucide-react";
 import { toast } from "sonner";
+import { useTheme } from "@/components/theme-provider";
 import {
   getNotificationSettings,
   saveNotificationSettings,
@@ -15,6 +16,7 @@ import {
 } from "@/utils/notifications";
 
 export default function Settings() {
+  const { theme, setTheme } = useTheme();
   const [settings, setSettings] = useState<NotificationSettingsType>(getNotificationSettings());
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>(
     typeof window !== 'undefined' && 'Notification' in window ? Notification.permission : 'default'
@@ -83,6 +85,85 @@ export default function Settings() {
           </div>
           <CardDescription>Customize your experience</CardDescription>
         </CardHeader>
+      </Card>
+
+      {/* Appearance Settings */}
+      <Card className="border-primary/30">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Palette className="h-5 w-5 text-primary" />
+            <CardTitle>Appearance</CardTitle>
+          </div>
+          <CardDescription>
+            Customize how the app looks
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-3">
+            <Label className="text-base font-medium">Theme</Label>
+            <div className="grid gap-3">
+              <Button
+                variant={theme === "light" ? "default" : "outline"}
+                onClick={() => {
+                  setTheme("light");
+                  toast.success("Switched to light mode");
+                }}
+                className="justify-start"
+              >
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-3">
+                    <Sun className="h-5 w-5" />
+                    <div className="text-left">
+                      <div className="font-semibold">Light</div>
+                      <div className="text-xs opacity-80">Bright and clear</div>
+                    </div>
+                  </div>
+                  {theme === "light" && <Badge>Active</Badge>}
+                </div>
+              </Button>
+
+              <Button
+                variant={theme === "dark" ? "default" : "outline"}
+                onClick={() => {
+                  setTheme("dark");
+                  toast.success("Switched to dark mode");
+                }}
+                className="justify-start"
+              >
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-3">
+                    <Moon className="h-5 w-5" />
+                    <div className="text-left">
+                      <div className="font-semibold">Dark</div>
+                      <div className="text-xs opacity-80">Easy on the eyes</div>
+                    </div>
+                  </div>
+                  {theme === "dark" && <Badge>Active</Badge>}
+                </div>
+              </Button>
+
+              <Button
+                variant={theme === "system" ? "default" : "outline"}
+                onClick={() => {
+                  setTheme("system");
+                  toast.success("Theme set to system preference");
+                }}
+                className="justify-start"
+              >
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-3">
+                    <Monitor className="h-5 w-5" />
+                    <div className="text-left">
+                      <div className="font-semibold">System</div>
+                      <div className="text-xs opacity-80">Matches your device</div>
+                    </div>
+                  </div>
+                  {theme === "system" && <Badge>Active</Badge>}
+                </div>
+              </Button>
+            </div>
+          </div>
+        </CardContent>
       </Card>
 
       {/* Notification Settings */}
