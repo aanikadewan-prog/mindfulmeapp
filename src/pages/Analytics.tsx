@@ -19,6 +19,33 @@ export default function Analytics() {
   const { toast } = useToast();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const checkAdminAccess = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
+
+      // Check if user has admin role
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .eq('role', 'admin')
+        .single();
+
+      if (roleError && roleError.code !== 'PGRST116') {
+        throw roleError;
+      }
+
+      setIsAdmin(!!roleData);
+    } catch (error) {
+      console.error('Error checking admin access:', error);
+    }
+  };
 
   const fetchAnalytics = async () => {
     try {
@@ -47,13 +74,29 @@ export default function Analytics() {
   };
 
   useEffect(() => {
-    fetchAnalytics();
+    checkAdminAccess().then(() => {
+      fetchAnalytics();
+    });
   }, []);
 
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-8">
+        <div className="max-w-md text-center space-y-4">
+          <div className="text-6xl">🔒</div>
+          <h2 className="text-2xl font-bold">Access Restricted</h2>
+          <p className="text-muted-foreground">
+            This analytics dashboard is only available to administrators.
+          </p>
+        </div>
       </div>
     );
   }

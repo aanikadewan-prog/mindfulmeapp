@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { BookOpen, Sparkles, Pen, Calendar, Heart } from "lucide-react";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 const prompts = [
   "What made you smile today?",
@@ -25,6 +26,7 @@ export default function Journal() {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [currentEntry, setCurrentEntry] = useState("");
   const [selectedPrompt, setSelectedPrompt] = useState("");
+  const [showCompletion, setShowCompletion] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -62,6 +64,10 @@ export default function Journal() {
 
     setCurrentEntry("");
     setSelectedPrompt(prompts[Math.floor(Math.random() * prompts.length)]);
+    setShowCompletion(true);
+    
+    // Hide completion after 5 seconds
+    setTimeout(() => setShowCompletion(false), 5000);
   };
 
   const formatDate = (dateString: string) => {
@@ -77,6 +83,11 @@ export default function Journal() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
+      {/* Activity Completion */}
+      {showCompletion && (
+        <ActivityCompletion activityName="Journaling" />
+      )}
+
       {/* Stats Header */}
       <div className="grid gap-4 md:grid-cols-3">
         <Card className="bg-gradient-to-br from-primary/10 to-primary/5">

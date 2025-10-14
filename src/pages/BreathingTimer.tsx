@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Play, Pause, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 type Phase = "inhale" | "hold" | "exhale" | "rest";
 
@@ -172,17 +173,9 @@ export default function BreathingTimer() {
             </div>
           </div>
 
-          {/* Completion Message */}
+          {/* Activity Completion */}
           {cycleCount >= 5 && (
-            <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-primary/50">
-              <CardContent className="pt-6 text-center">
-                <div className="text-5xl mb-3">🎉</div>
-                <h3 className="text-2xl font-semibold mb-2">Great Job!</h3>
-                <p className="text-muted-foreground">
-                  You showed up for yourself today. That takes courage. 💜
-                </p>
-              </CardContent>
-            </Card>
+            <ActivityCompletion activityName="Mindful Breathing" />
           )}
 
           {/* Controls */}

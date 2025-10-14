@@ -81,26 +81,41 @@ export default function Rewards() {
 
       {/* Reward Suggestions Grid */}
       <div className="grid gap-6 md:grid-cols-2">
-        {rewardSuggestions.map((reward, index) => (
-          <Card 
-            key={index}
-            className="hover:shadow-lg transition-all hover:border-primary/30"
-          >
-            <CardHeader>
-              <div className="flex items-start justify-between mb-4">
-                <div className="text-5xl">{reward.emoji}</div>
-                <Badge variant="secondary" className="flex items-center gap-1">
-                  <Trophy className="h-3 w-3" />
-                  {reward.days} days
-                </Badge>
-              </div>
-              <CardTitle className="text-xl">{reward.title}</CardTitle>
-              <CardDescription className="text-base mt-2">
-                {reward.description}
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        ))}
+        {rewardSuggestions.map((reward, index) => {
+          const isLocked = false; // Replace with actual unlock logic based on user streak
+          return (
+            <Card 
+              key={index}
+              className={`hover:shadow-lg transition-all hover:border-primary/30 relative ${
+                isLocked ? 'opacity-60' : ''
+              }`}
+            >
+              {isLocked && (
+                <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] rounded-lg z-10 flex items-center justify-center">
+                  <div className="text-center space-y-2">
+                    <div className="text-4xl">🔒</div>
+                    <p className="text-sm font-medium text-muted-foreground px-4">
+                      Unlock at {reward.days} days
+                    </p>
+                  </div>
+                </div>
+              )}
+              <CardHeader>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="text-5xl">{reward.emoji}</div>
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    <Trophy className="h-3 w-3" />
+                    {reward.days} days
+                  </Badge>
+                </div>
+                <CardTitle className="text-xl">{reward.title}</CardTitle>
+                <CardDescription className="text-base mt-2">
+                  {reward.description}
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          );
+        })}
       </div>
 
       {/* Create Your Own Section */}

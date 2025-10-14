@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Play, Pause, Volume2 } from "lucide-react";
+import { ArrowLeft, Play, Pause, Volume2, Music } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Slider } from "@/components/ui/slider";
 
@@ -204,6 +204,22 @@ export default function SoothingSounds() {
                 <li>• Combine with deep breathing for deeper relaxation</li>
                 <li>• Let it play while you work, read, or meditate</li>
               </ul>
+            </CardContent>
+          </Card>
+
+          {/* Music Section */}
+          <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/20">
+            <CardContent className="pt-6">
+              <div className="flex items-start gap-4">
+                <Music className="h-8 w-8 text-primary flex-shrink-0 mt-1" />
+                <div className="space-y-2">
+                  <h2 className="text-xl font-semibold">Listen to Your Calm Music</h2>
+                  <p className="text-muted-foreground">
+                    Don't forget to put on your favorite calm playlist or soothing music. 
+                    Sometimes the best sounds are the ones that resonate with your soul. 🎵
+                  </p>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </CardContent>
