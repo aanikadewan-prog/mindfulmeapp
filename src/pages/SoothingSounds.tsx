@@ -26,7 +26,7 @@ const sounds: Sound[] = [
     name: "Ocean Waves",
     emoji: "🌊",
     description: "Calming waves on the shore",
-    url: "https://cdn.pixabay.com/audio/2022/06/07/audio_37136748e9.mp3"
+    url: "https://cdn.pixabay.com/audio/2021/08/04/audio_12b0c7443c.mp3"
   },
   {
     id: "forest",
@@ -40,21 +40,21 @@ const sounds: Sound[] = [
     name: "Crackling Fire",
     emoji: "🔥",
     description: "Warm fireplace ambience",
-    url: "https://cdn.pixabay.com/audio/2022/03/12/audio_13c0fa5d5a.mp3"
+    url: "https://cdn.pixabay.com/audio/2022/03/10/audio_9a80e93c5c.mp3"
   },
   {
     id: "wind",
     name: "Gentle Wind",
     emoji: "🍃",
     description: "Wind through trees",
-    url: "https://cdn.pixabay.com/audio/2022/05/13/audio_68f33e2378.mp3"
+    url: "https://cdn.pixabay.com/audio/2022/03/12/audio_7c6f97e1e3.mp3"
   },
   {
     id: "stream",
     name: "Flowing Stream",
     emoji: "💧",
     description: "Babbling brook sounds",
-    url: "https://cdn.pixabay.com/audio/2022/03/12/audio_2817362e85.mp3"
+    url: "https://cdn.pixabay.com/audio/2024/08/10/audio_98fd297c00.mp3"
   }
 ];
 
