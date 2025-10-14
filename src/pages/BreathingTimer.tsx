@@ -172,6 +172,19 @@ export default function BreathingTimer() {
             </div>
           </div>
 
+          {/* Completion Message */}
+          {cycleCount >= 5 && (
+            <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-primary/50">
+              <CardContent className="pt-6 text-center">
+                <div className="text-5xl mb-3">🎉</div>
+                <h3 className="text-2xl font-semibold mb-2">Great Job!</h3>
+                <p className="text-muted-foreground">
+                  You showed up for yourself today. That takes courage. 💜
+                </p>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Controls */}
           <div className="flex items-center justify-center gap-4">
             <Button

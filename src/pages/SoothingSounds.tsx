@@ -19,42 +19,42 @@ const sounds: Sound[] = [
     name: "Gentle Rain",
     emoji: "🌧️",
     description: "Soft rainfall on leaves",
-    url: "https://cdn.pixabay.com/audio/2022/05/13/audio_257112ce99.mp3"
+    url: "https://cdn.pixabay.com/download/audio/2022/05/13/audio_257112ce99.mp3?filename=rain-on-leaves-6041.mp3"
   },
   {
     id: "ocean",
     name: "Ocean Waves",
     emoji: "🌊",
     description: "Calming waves on the shore",
-    url: "https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3"
+    url: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=ocean-wave-6044.mp3"
   },
   {
     id: "forest",
     name: "Forest Birds",
     emoji: "🌲",
     description: "Morning birds chirping",
-    url: "https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3"
+    url: "https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3?filename=forest-with-small-river-birds-and-nature-field-recording-6735.mp3"
   },
   {
     id: "fire",
     name: "Crackling Fire",
     emoji: "🔥",
     description: "Warm fireplace ambience",
-    url: "https://cdn.pixabay.com/audio/2021/08/09/audio_dbbf8c0db3.mp3"
+    url: "https://cdn.pixabay.com/download/audio/2021/08/09/audio_dbbf8c0db3.mp3?filename=fireplace-6307.mp3"
   },
   {
     id: "wind",
     name: "Gentle Wind",
     emoji: "🍃",
     description: "Wind through trees",
-    url: "https://cdn.pixabay.com/audio/2022/03/24/audio_c610232401.mp3"
+    url: "https://cdn.pixabay.com/download/audio/2022/03/24/audio_c610232401.mp3?filename=wind-in-trees-117477.mp3"
   },
   {
     id: "stream",
     name: "Flowing Stream",
     emoji: "💧",
     description: "Babbling brook sounds",
-    url: "https://cdn.pixabay.com/audio/2022/06/07/audio_b9bd4170e4.mp3"
+    url: "https://cdn.pixabay.com/download/audio/2022/06/07/audio_b9bd4170e4.mp3?filename=small-stream-in-forest-20842.mp3"
   }
 ];
 

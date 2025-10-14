@@ -128,9 +128,15 @@ export default function GratitudePractice() {
                 </Button>
 
                 {todayEntry && (
-                  <p className="text-sm text-center text-muted-foreground">
-                    ✨ You've captured today's gratitude
-                  </p>
+                  <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-primary/50 mt-4">
+                    <CardContent className="pt-6 text-center">
+                      <div className="text-4xl mb-2">🎉</div>
+                      <h3 className="text-xl font-semibold mb-2">Beautifully Done!</h3>
+                      <p className="text-muted-foreground">
+                        You showed up for yourself today. That's worth celebrating. 💜
+                      </p>
+                    </CardContent>
+                  </Card>
                 )}
               </div>
             </CardContent>

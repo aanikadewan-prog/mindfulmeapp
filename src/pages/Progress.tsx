@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Award, Calendar, Flame, Heart } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CheckIn {
   date: string;
@@ -30,19 +31,57 @@ export default function Progress() {
   const [checkIns, setCheckIns] = useState<CheckIn[]>([]);
   const [streak, setStreak] = useState(0);
   const [achievements, setAchievements] = useState<typeof milestones>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const saved = localStorage.getItem("checkIns");
-    if (saved) {
-      setCheckIns(JSON.parse(saved));
-    }
+    const loadData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
-    const savedStreak = localStorage.getItem("streak");
-    const currentStreak = savedStreak ? parseInt(savedStreak) : 0;
-    setStreak(currentStreak);
+      // Fetch check-ins from database
+      const { data: dbCheckIns } = await supabase
+        .from('check_ins')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
 
-    const earned = milestones.filter((m) => currentStreak >= m.days);
-    setAchievements(earned);
+      if (dbCheckIns) {
+        const formattedCheckIns: CheckIn[] = dbCheckIns.map(c => ({
+          date: c.created_at,
+          mood: c.mood,
+          answers: (c.answers as Record<string, boolean>) || {}
+        }));
+        setCheckIns(formattedCheckIns);
+
+        // Calculate streak
+        let currentStreak = 0;
+        if (dbCheckIns.length > 0) {
+          currentStreak = 1;
+          const dates = dbCheckIns.map(c => new Date(c.created_at).toDateString());
+          for (let i = 1; i < dates.length; i++) {
+            const prevDate = new Date(dates[i-1]);
+            const currDate = new Date(dates[i]);
+            const diffDays = Math.floor((prevDate.getTime() - currDate.getTime()) / (1000 * 60 * 60 * 24));
+            if (diffDays === 1) {
+              currentStreak++;
+            } else {
+              break;
+            }
+          }
+        }
+        setStreak(currentStreak);
+
+        const earned = milestones.filter((m) => currentStreak >= m.days);
+        setAchievements(earned);
+      }
+
+      setLoading(false);
+    };
+
+    loadData();
   }, []);
 
   const getAverageMood = () => {
@@ -111,6 +150,30 @@ export default function Progress() {
 
   const chartData = getMoodChartData();
   const insights = getMoodInsights();
+
+  if (loading) {
+    return (
+      <div className="max-w-5xl mx-auto space-y-6 animate-fade-in flex items-center justify-center min-h-[400px]">
+        <p className="text-muted-foreground">Loading your progress...</p>
+      </div>
+    );
+  }
+
+  if (checkIns.length === 0) {
+    return (
+      <div className="max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <Card>
+          <CardContent className="pt-8 pb-8 text-center">
+            <div className="text-5xl mb-3">📊</div>
+            <h3 className="text-2xl font-semibold mb-2">No Check-Ins Yet</h3>
+            <p className="text-muted-foreground">
+              Complete your first check-in to start tracking your progress!
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto space-y-6 animate-fade-in">

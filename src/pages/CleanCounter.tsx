@@ -128,136 +128,140 @@ export default function CleanCounter() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="text-center space-y-3">
-        <div className="flex items-center justify-center gap-3">
-          <Heart className="h-10 w-10 text-primary" fill="currentColor" />
-          <h1 className="text-4xl font-bold">Clean Counter</h1>
-        </div>
-        <p className="text-lg text-muted-foreground">
-          Track your journey to recovery
-        </p>
-      </div>
-
       {!isTracking && (
         <>
-          {/* What is this for section */}
-          <Card>
-            <CardContent className="pt-6 space-y-4">
-              <h2 className="text-2xl font-bold">What is this for?</h2>
+          {/* Header with Heart Icon */}
+          <div className="text-center space-y-3 mb-8">
+            <div className="flex items-center justify-center gap-3">
+              <Heart className="h-12 w-12 text-primary" />
+              <h1 className="text-5xl font-bold tracking-tight">Clean Counter</h1>
+            </div>
+            <p className="text-xl text-muted-foreground">Track your journey to recovery</p>
+          </div>
+
+          {/* What is this for Card */}
+          <Card className="border-primary/30 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl">What is this for?</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <p className="text-muted-foreground leading-relaxed">
-                This private counter helps you track your recovery from self-harm or any other behavior you're 
-                working to change. Only you can see this information – it stays on your device.
+                This private counter helps you track your recovery from self-harm or any other behavior you're working to change. 
+                Only you can see this information - it stays on your device.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Remember: Recovery isn't a straight line. If you need to reset, that's okay. Each day clean is an 
-                achievement, and starting over takes courage.
+                Remember: Recovery isn't a straight line. If you need to reset, that's okay. Each day clean is an achievement, 
+                and starting over takes courage.
               </p>
             </CardContent>
           </Card>
 
-          {/* Start section */}
-          <Card className="bg-gradient-to-br from-primary/5 to-secondary/5">
-            <CardContent className="pt-8 pb-8 text-center space-y-6">
-              <div className="text-6xl mb-4">🌱</div>
-              <h2 className="text-2xl font-bold">Start Your Journey</h2>
-              <p className="text-muted-foreground max-w-md mx-auto">
-                Beginning this counter is a brave step. We believe in you.
-              </p>
-              <Button 
-                onClick={startCounter} 
-                size="lg"
-                className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-secondary hover:opacity-90"
-              >
-                Start Counter
-              </Button>
-              
-              <div className="relative pt-4">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
+          {/* Start Your Journey Card */}
+          <Card className="border-primary/30 shadow-lg bg-gradient-to-br from-primary/5 to-secondary/5">
+            <CardContent className="pt-8 pb-8">
+              <div className="text-center space-y-6">
+                <div className="text-6xl">🌱</div>
+                <div className="space-y-2">
+                  <h2 className="text-3xl font-bold">Start Your Journey</h2>
+                  <p className="text-muted-foreground text-lg">
+                    Beginning this counter is a brave step. We believe in you.
+                  </p>
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    Already started your journey?
-                  </span>
+                <Button 
+                  size="lg" 
+                  onClick={startCounter}
+                  className="bg-gradient-to-r from-primary via-secondary to-accent hover:opacity-90 text-white px-8 py-6 text-lg shadow-lg"
+                >
+                  Start Counter
+                </Button>
+                
+                <div className="relative pt-4">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      Already started your journey?
+                    </span>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
-                <Dialog open={showManualEntry} onOpenChange={setShowManualEntry}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="lg" className="gap-2">
-                      <Edit className="h-4 w-4" />
-                      Set Days
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Enter Clean Days</DialogTitle>
-                      <DialogDescription>
-                        If you were already clean before getting the app, enter how many days
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="space-y-4 py-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="initial-days">Number of Clean Days</Label>
-                        <Input
-                          id="initial-days"
-                          type="number"
-                          min="0"
-                          placeholder="e.g., 15"
-                          value={manualDays}
-                          onChange={(e) => setManualDays(e.target.value)}
+                
+                <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
+                  <Dialog open={showManualEntry} onOpenChange={setShowManualEntry}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="lg" className="gap-2">
+                        <Edit className="h-4 w-4" />
+                        Set Days
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Enter Clean Days</DialogTitle>
+                        <DialogDescription>
+                          If you were already clean before getting the app, enter how many days
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="initial-days">Number of Clean Days</Label>
+                          <Input
+                            id="initial-days"
+                            type="number"
+                            min="0"
+                            placeholder="e.g., 15"
+                            value={manualDays}
+                            onChange={(e) => setManualDays(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button variant="outline" onClick={() => {
+                          setShowManualEntry(false);
+                          setManualDays("");
+                        }}>
+                          Cancel
+                        </Button>
+                        <Button onClick={handleManualDaysSubmit}>
+                          Set Counter
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                  
+                  <Dialog open={showDatePicker} onOpenChange={setShowDatePicker}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="lg" className="gap-2">
+                        <CalendarDays className="h-4 w-4" />
+                        Pick Date
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Select Start Date</DialogTitle>
+                        <DialogDescription>
+                          Choose the date when you started your clean journey
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="flex justify-center py-4">
+                        <Calendar
+                          mode="single"
+                          selected={selectedDate}
+                          onSelect={setSelectedDate}
+                          disabled={(date) => date > new Date()}
+                          initialFocus
                         />
                       </div>
-                    </div>
-                    <DialogFooter>
-                      <Button variant="outline" onClick={() => {
-                        setShowManualEntry(false);
-                        setManualDays("");
-                      }}>
-                        Cancel
-                      </Button>
-                      <Button onClick={handleManualDaysSubmit}>
-                        Set Counter
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-                
-                <Dialog open={showDatePicker} onOpenChange={setShowDatePicker}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="lg" className="gap-2">
-                      <CalendarDays className="h-4 w-4" />
-                      Pick Date
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Select Start Date</DialogTitle>
-                      <DialogDescription>
-                        Choose the date when you started your clean journey
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="flex justify-center py-4">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        disabled={(date) => date > new Date()}
-                        initialFocus
-                      />
-                    </div>
-                    <DialogFooter>
-                      <Button variant="outline" onClick={() => setShowDatePicker(false)}>
-                        Cancel
-                      </Button>
-                      <Button onClick={handleDateSelect}>
-                        Start Journey
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                      <DialogFooter>
+                        <Button variant="outline" onClick={() => setShowDatePicker(false)}>
+                          Cancel
+                        </Button>
+                        <Button onClick={handleDateSelect}>
+                          Start Journey
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </div>
             </CardContent>
           </Card>
