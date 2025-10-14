@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Mountain, Play, Pause, RotateCcw, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 interface MindfulPrompt {
   sense: string;
@@ -201,15 +202,7 @@ export default function ShortWalk() {
 
           {/* Completion */}
           {isComplete && (
-            <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-primary/50">
-              <CardContent className="pt-6 text-center">
-                <div className="text-5xl mb-3">🎉</div>
-                <h3 className="text-2xl font-semibold mb-2">Walk Complete!</h3>
-                <p className="text-muted-foreground">
-                  You got outside and moved your body. That's a win! 💪
-                </p>
-              </CardContent>
-            </Card>
+            <ActivityCompletion activityName="Short Walk" />
           )}
 
           {/* Mindfulness Checklist */}

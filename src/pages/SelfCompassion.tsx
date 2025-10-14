@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Heart, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 const affirmations = [
   {
@@ -187,6 +188,9 @@ export default function SelfCompassion() {
               </p>
             </CardContent>
           </Card>
+
+          {/* Activity Completion */}
+          <ActivityCompletion activityName="Self-Compassion" />
         </CardContent>
       </Card>
 

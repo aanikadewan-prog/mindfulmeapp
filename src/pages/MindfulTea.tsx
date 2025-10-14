@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Clock, Thermometer, Coffee } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 interface Tea {
   name: string;
@@ -210,6 +211,9 @@ export default function MindfulTea() {
               </ul>
             </CardContent>
           </Card>
+
+          {/* Activity Completion */}
+          <ActivityCompletion activityName="Mindful Tea" />
         </CardContent>
       </Card>
     </div>

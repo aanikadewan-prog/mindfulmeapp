@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Moon, Check, Volume2, VolumeX } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 interface Step {
   id: number;
@@ -290,15 +291,7 @@ export default function EveningWindDown() {
 
           {/* Completion Message */}
           {isComplete && (
-            <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-primary/50">
-              <CardContent className="pt-6 text-center">
-                <div className="text-5xl mb-3">✨</div>
-                <h3 className="text-2xl font-semibold mb-2">Wind-Down Complete!</h3>
-                <p className="text-muted-foreground">
-                  You've prepared your mind and body for rest. Sleep well. 💜
-                </p>
-              </CardContent>
-            </Card>
+            <ActivityCompletion activityName="Evening Wind-Down" />
           )}
 
           {/* Step Timeline */}

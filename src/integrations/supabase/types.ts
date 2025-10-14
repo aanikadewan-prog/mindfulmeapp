@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_completions: {
+        Row: {
+          activity_name: string
+          completed_at: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          activity_name: string
+          completed_at?: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          activity_name?: string
+          completed_at?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       check_ins: {
         Row: {
           answers: Json | null

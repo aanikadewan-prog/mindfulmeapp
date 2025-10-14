@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Sunrise, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 interface RitualStep {
   id: string;
@@ -134,15 +135,7 @@ export default function MorningRitual() {
 
           {/* Completion Message */}
           {completedCount === steps.length && (
-            <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-primary/50">
-              <CardContent className="pt-6 text-center">
-                <div className="text-4xl mb-2">🌟</div>
-                <h3 className="text-xl font-semibold mb-2">Amazing Start!</h3>
-                <p className="text-muted-foreground">
-                  You've completed your morning ritual. You're setting yourself up for a great day!
-                </p>
-              </CardContent>
-            </Card>
+            <ActivityCompletion activityName="Morning Ritual" />
           )}
 
           {/* Tips */}

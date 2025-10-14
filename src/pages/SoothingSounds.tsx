@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Play, Pause, Volume2, Music } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Slider } from "@/components/ui/slider";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 interface Sound {
   id: string;
@@ -222,6 +223,9 @@ export default function SoothingSounds() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Activity Completion */}
+          <ActivityCompletion activityName="Soothing Sounds" />
         </CardContent>
       </Card>
     </div>

@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Heart, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 interface GratitudeEntry {
   date: string;
@@ -128,15 +129,7 @@ export default function GratitudePractice() {
                 </Button>
 
                 {todayEntry && (
-                  <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-primary/50 mt-4">
-                    <CardContent className="pt-6 text-center">
-                      <div className="text-4xl mb-2">🎉</div>
-                      <h3 className="text-xl font-semibold mb-2">Beautifully Done!</h3>
-                      <p className="text-muted-foreground">
-                        You showed up for yourself today. That's worth celebrating. 💜
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <ActivityCompletion activityName="Gratitude Practice" />
                 )}
               </div>
             </CardContent>

@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, Sparkles, Heart } from "lucide-react";
 import confetti from "canvas-confetti";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface ActivityCompletionProps {
   activityName: string;
@@ -12,7 +14,7 @@ interface ActivityCompletionProps {
 export default function ActivityCompletion({ activityName, onComplete }: ActivityCompletionProps) {
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
     setIsCompleted(true);
     
     // Trigger confetti
@@ -21,6 +23,27 @@ export default function ActivityCompletion({ activityName, onComplete }: Activit
       spread: 70,
       origin: { y: 0.6 }
     });
+
+    // Save completion to database
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        const { error } = await supabase
+          .from('activity_completions')
+          .insert({
+            user_id: user.id,
+            activity_name: activityName
+          });
+
+        if (error) {
+          console.error('Error saving activity completion:', error);
+          toast.error('Could not save completion');
+        }
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
 
     if (onComplete) {
       onComplete();

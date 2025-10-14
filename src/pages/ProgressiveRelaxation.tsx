@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Waves, Play, Pause, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 interface BodyPart {
   id: number;
@@ -303,15 +304,7 @@ export default function ProgressiveRelaxation() {
 
               {/* Completion */}
               {isComplete && (
-                <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-primary/50">
-                  <CardContent className="pt-6 text-center">
-                    <div className="text-5xl mb-3">✨</div>
-                    <h3 className="text-2xl font-semibold mb-2">Complete!</h3>
-                    <p className="text-muted-foreground">
-                      Notice how much lighter your body feels. You've released so much tension. 💜
-                    </p>
-                  </CardContent>
-                </Card>
+                <ActivityCompletion activityName="Progressive Muscle Relaxation" />
               )}
             </div>
           </div>

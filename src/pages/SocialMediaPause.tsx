@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Sparkles, Instagram, Facebook, Hash, Youtube, Video, Camera, TrendingUp, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 interface SocialApp {
   id: string;
@@ -211,6 +212,9 @@ export default function SocialMediaPause() {
               </p>
             </CardContent>
           </Card>
+
+          {/* Activity Completion */}
+          <ActivityCompletion activityName="Social Media Pause" />
         </CardContent>
       </Card>
     </div>

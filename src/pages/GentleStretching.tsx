@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Heart, Play, Pause, RotateCcw, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 interface Stretch {
   id: number;
@@ -323,15 +324,7 @@ export default function GentleStretching() {
 
           {/* Completion */}
           {isComplete && (
-            <Card className="bg-gradient-to-br from-primary/20 to-secondary/20 border-primary/50">
-              <CardContent className="pt-6 text-center">
-                <div className="text-5xl mb-3">🎉</div>
-                <h3 className="text-2xl font-semibold mb-2">Routine Complete!</h3>
-                <p className="text-muted-foreground">
-                  You took 10 minutes for yourself. Your body thanks you! 💜
-                </p>
-              </CardContent>
-            </Card>
+            <ActivityCompletion activityName="Gentle Stretching" />
           )}
 
           {/* Stretch Progress Indicators */}

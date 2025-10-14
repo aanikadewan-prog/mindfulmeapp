@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Play, Pause, RotateCcw, Smartphone, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import ActivityCompletion from "@/components/ActivityCompletion";
 
 export default function PhoneFreeHour() {
   const navigate = useNavigate();
@@ -176,6 +177,11 @@ export default function PhoneFreeHour() {
               )}
             </div>
           </div>
+
+          {/* Completion */}
+          {isComplete && (
+            <ActivityCompletion activityName="Phone-Free Time" />
+          )}
 
           {/* Motivational Message */}
           {isActive && !isComplete && (
