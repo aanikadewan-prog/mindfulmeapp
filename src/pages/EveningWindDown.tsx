@@ -130,6 +130,29 @@ export default function EveningWindDown() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Breathing circle helpers (for steps 4 and 7)
+  const getBreathingPhase = () => {
+    const cycleTime = 14; // 4 in + 4 hold + 6 out = 14 seconds per cycle
+    const timeInCycle = timeLeft % cycleTime;
+    
+    if (timeInCycle > 10) return { phase: 'inhale', count: Math.ceil(timeInCycle - 10) };
+    if (timeInCycle > 6) return { phase: 'hold', count: Math.ceil(timeInCycle - 6) };
+    if (timeInCycle > 0) return { phase: 'exhale', count: Math.ceil(timeInCycle) };
+    return { phase: 'exhale', count: 1 };
+  };
+
+  const getCircleScale = () => {
+    const { phase, count } = getBreathingPhase();
+    if (phase === 'inhale') return 0.5 + (count / 4) * 0.5;
+    if (phase === 'hold') return 1.0;
+    if (phase === 'exhale') return 1.0 - ((4 - count) / 6) * 0.5;
+    return 0.5;
+  };
+
+  const isBreathingStep = currentStep === 3 || currentStep === 6; // Deep Breathing or Final Breathing
+  const isReleaseStep = currentStep === 4; // Release the Day
+  const showReleaseVisualization = isReleaseStep && timeLeft <= 20 && timeLeft > 0;
+
   const progress = ((steps[currentStep].duration - timeLeft) / steps[currentStep].duration) * 100;
   const overallProgress = ((currentStep + (completedSteps.includes(currentStep) ? 1 : 0)) / steps.length) * 100;
 
@@ -181,10 +204,32 @@ export default function EveningWindDown() {
           <Card className="bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 border-2 border-primary/30">
             <CardContent className="pt-8 pb-8">
               <div className="text-center space-y-6">
-                {/* Icon */}
-                <div className="text-8xl animate-pulse">
-                  {steps[currentStep].icon}
-                </div>
+                {/* Breathing Circle Visualization for Breathing Steps */}
+                {isBreathingStep && isActive ? (
+                  <div className="flex flex-col items-center justify-center gap-6">
+                    <div className="relative w-64 h-64 flex items-center justify-center">
+                      <div
+                        className="absolute rounded-full bg-gradient-to-br from-primary/30 via-secondary/30 to-accent/30 backdrop-blur-sm transition-all duration-1000 ease-in-out flex items-center justify-center"
+                        style={{
+                          width: `${getCircleScale() * 100}%`,
+                          height: `${getCircleScale() * 100}%`,
+                        }}
+                      >
+                        <div className="text-6xl font-bold text-primary">
+                          {getBreathingPhase().count}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-2xl font-semibold capitalize text-primary">
+                      {getBreathingPhase().phase}
+                    </div>
+                  </div>
+                ) : (
+                  /* Icon for non-breathing steps or when paused */
+                  <div className="text-8xl animate-pulse">
+                    {steps[currentStep].icon}
+                  </div>
+                )}
 
                 {/* Step Title */}
                 <div>
@@ -199,6 +244,19 @@ export default function EveningWindDown() {
 
                 {/* Progress for current step */}
                 <Progress value={progress} className="h-3" />
+
+                {/* Special Release Visualization */}
+                {showReleaseVisualization && (
+                  <Card className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-400/30 animate-fade-in">
+                    <CardContent className="pt-6 pb-6">
+                      <p className="text-2xl font-semibold text-purple-100 leading-relaxed animate-pulse">
+                        Now imagine all of these worries flying away... 
+                        <br />
+                        Release them from your mind. ✨
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
 
                 {/* Instruction */}
                 <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto px-4">
