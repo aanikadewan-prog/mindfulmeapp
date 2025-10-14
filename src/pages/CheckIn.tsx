@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
 const moods = [
   { emoji: "😊", label: "Great", value: 5, color: "bg-accent" },
@@ -23,7 +25,12 @@ const questions = [
 export default function CheckIn() {
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
   const [answers, setAnswers] = useState<Record<string, boolean>>({});
-  const [step, setStep] = useState<"mood" | "questions" | "complete">("mood");
+  const [step, setStep] = useState<"mood" | "questions" | "loading" | "complete">("mood");
+  const [aiRecommendations, setAiRecommendations] = useState<{
+    message: string;
+    activities: string[];
+    reasoning: string;
+  } | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -47,7 +54,7 @@ export default function CheckIn() {
     setAnswers((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
     const checkIn = {
       date: new Date().toISOString(),
       mood: selectedMood,
@@ -71,12 +78,33 @@ export default function CheckIn() {
       localStorage.setItem("lastCheckIn", today);
     }
 
-    toast({
-      title: "Check-in complete! 🎉",
-      description: "Your progress has been saved",
-    });
+    // Show loading state
+    setStep("loading");
 
-    setStep("complete");
+    // Get AI recommendations
+    try {
+      const { data, error } = await supabase.functions.invoke("recommend-activities", {
+        body: { mood: selectedMood, answers }
+      });
+
+      if (error) throw error;
+
+      setAiRecommendations(data);
+      setStep("complete");
+
+      toast({
+        title: "Check-in complete! 🎉",
+        description: "Got personalized recommendations for you",
+      });
+    } catch (error) {
+      console.error("Error getting recommendations:", error);
+      // Fallback to basic recommendations
+      setStep("complete");
+      toast({
+        title: "Check-in complete! 🎉",
+        description: "Your progress has been saved",
+      });
+    }
   };
 
   const getRecommendations = () => {
@@ -91,70 +119,100 @@ export default function CheckIn() {
     }
   };
 
+  // Map activity names to routes
+  const activityRoutes: Record<string, string> = {
+    "Breathing Timer": "/breathing",
+    "Gentle Stretching": "/gentle-stretching",
+    "Progressive Relaxation": "/progressive-relaxation",
+    "Morning Ritual": "/morning-ritual",
+    "Mindful Tea": "/mindful-tea",
+    "Short Walk": "/short-walk",
+    "Soothing Sounds": "/soothing-sounds",
+    "Gratitude Practice": "/gratitude",
+    "Self-Compassion": "/self-compassion",
+    "Phone-Free Hour": "/phone-free",
+    "Social Media Pause": "/social-media-pause",
+    "Evening Wind-Down": "/evening-wind-down",
+    "Journal": "/journal"
+  };
+
+  if (step === "loading") {
+    return (
+      <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
+        <Card className="border-primary/20 shadow-lg">
+          <CardContent className="pt-12 pb-12">
+            <div className="flex flex-col items-center gap-4">
+              <Loader2 className="h-12 w-12 animate-spin text-primary" />
+              <p className="text-lg text-muted-foreground">
+                Finding the best activities for you...
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (step === "complete") {
-    const recommendations = getRecommendations();
-    const completedCount = Object.values(answers).filter(v => v === true).length;
-    
-    let title = "";
-    let description = "";
-    
-    if (completedCount === 4) {
-      title = "Amazing! You're taking great care of yourself! 🌟";
-      description = "Keep up these healthy habits";
-    } else if (completedCount >= 2) {
-      title = "Thanks for checking in! 💜";
-      description = "Here are some activities that might help";
-    } else {
-      title = "Thanks for being here 💜";
-      description = "Small steps count. Here are some gentle activities";
-    }
+    const recommendations = aiRecommendations || { 
+      message: "Thanks for checking in today 💜",
+      activities: getRecommendations(),
+      reasoning: "These activities might help support your wellbeing."
+    };
     
     return (
       <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
         <Card className="border-primary/20 shadow-lg">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 text-6xl">✨</div>
-            <CardTitle className="text-2xl">{title}</CardTitle>
-            <CardDescription>{description}</CardDescription>
+            <CardTitle className="text-2xl">{recommendations.message}</CardTitle>
+            <CardDescription className="text-base mt-2">{recommendations.reasoning}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              {recommendations.map((rec) => (
-                <Badge
-                  key={rec}
-                  variant="outline"
-                  className="py-3 px-4 justify-center text-center border-primary/30"
-                >
-                  {rec}
-                </Badge>
-              ))}
-            </div>
-            <div className="pt-4 space-y-2">
-              <Button
-                onClick={() => navigate("/activities")}
-                className="w-full"
-              >
-                Explore Activities
-              </Button>
-              <div className="grid grid-cols-2 gap-2 mt-2">
-                {recommendations.slice(0, 4).map((rec) => (
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-muted-foreground text-center mb-3">
+                Recommended for you right now:
+              </p>
+              <div className="grid gap-2">
+                {recommendations.activities.map((activity) => (
                   <Button
-                    key={rec}
+                    key={activity}
                     variant="outline"
-                    size="sm"
-                    onClick={() => navigate("/activities")}
-                    className="text-xs"
+                    onClick={() => {
+                      const route = activityRoutes[activity];
+                      if (route) {
+                        navigate(route);
+                      } else {
+                        navigate("/activities");
+                      }
+                    }}
+                    className="w-full justify-start text-left h-auto py-3 px-4 border-primary/30 hover:bg-primary/10"
                   >
-                    {rec}
+                    <span className="font-medium">{activity}</span>
                   </Button>
                 ))}
               </div>
+            </div>
+            
+            <div className="pt-4 space-y-2 border-t">
               <Button
-                onClick={() => navigate("/journal")}
+                onClick={() => navigate("/activities")}
+                variant="secondary"
+                className="w-full"
+              >
+                See All Activities
+              </Button>
+              <Button
+                onClick={() => {
+                  setSelectedMood(null);
+                  setAnswers({});
+                  setStep("mood");
+                  setAiRecommendations(null);
+                }}
                 variant="outline"
                 className="w-full"
               >
-                Write in Journal
+                Check In Again
               </Button>
             </div>
           </CardContent>

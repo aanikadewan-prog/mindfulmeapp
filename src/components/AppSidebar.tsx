@@ -1,4 +1,4 @@
-import { Home, BookOpen, TrendingUp, Sparkles, Heart, LogOut, Settings } from "lucide-react";
+import { Home, BookOpen, TrendingUp, Sparkles, Heart, MessageCircle, LogOut, Settings } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -17,6 +17,7 @@ import {
 const items = [
   { title: "Home", url: "/", icon: Home },
   { title: "Journal", url: "/journal", icon: BookOpen },
+  { title: "Vent Space", url: "/vent", icon: MessageCircle },
   { title: "Progress", url: "/progress", icon: TrendingUp },
   { title: "Activities", url: "/activities", icon: Sparkles },
   { title: "Clean Counter", url: "/clean", icon: Heart },
