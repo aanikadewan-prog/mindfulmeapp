@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { Users, Activity, TrendingUp, BarChart } from "lucide-react";
+import { Users, Activity, TrendingUp, BarChart, Calendar, BarChart3 } from "lucide-react";
 
 interface AnalyticsData {
   total_users: number;
@@ -15,11 +15,23 @@ interface AnalyticsData {
   updated_at: string;
 }
 
+interface DailyUser {
+  date: string;
+  count: number;
+}
+
+interface ActivityUsage {
+  activity_name: string;
+  completion_count: number;
+}
+
 export default function Analytics() {
   const { toast } = useToast();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [dailyUsers, setDailyUsers] = useState<DailyUser[]>([]);
+  const [activityUsage, setActivityUsage] = useState<ActivityUsage[]>([]);
 
   const checkAdminAccess = async () => {
     try {
@@ -35,7 +47,7 @@ export default function Analytics() {
         .select('role')
         .eq('user_id', user.id)
         .eq('role', 'admin')
-        .single();
+        .maybeSingle();
 
       if (roleError && roleError.code !== 'PGRST116') {
         throw roleError;
@@ -73,9 +85,72 @@ export default function Analytics() {
     }
   };
 
+  const fetchDailyUsers = async () => {
+    try {
+      // Get unique users per day from activity completions for the last 30 days
+      const { data, error } = await supabase
+        .from('activity_completions')
+        .select('completed_at, user_id')
+        .gte('completed_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString());
+
+      if (error) throw error;
+
+      // Group by date and count unique users
+      const dailyMap = new Map<string, Set<string>>();
+      data?.forEach(item => {
+        const date = new Date(item.completed_at).toLocaleDateString();
+        if (!dailyMap.has(date)) {
+          dailyMap.set(date, new Set());
+        }
+        dailyMap.get(date)!.add(item.user_id);
+      });
+
+      const dailyData: DailyUser[] = Array.from(dailyMap.entries())
+        .map(([date, users]) => ({
+          date,
+          count: users.size
+        }))
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+      setDailyUsers(dailyData);
+    } catch (error) {
+      console.error('Error fetching daily users:', error);
+    }
+  };
+
+  const fetchActivityUsage = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('activity_completions')
+        .select('activity_name');
+
+      if (error) throw error;
+
+      // Count completions per activity
+      const usageMap = new Map<string, number>();
+      data?.forEach(item => {
+        const count = usageMap.get(item.activity_name) || 0;
+        usageMap.set(item.activity_name, count + 1);
+      });
+
+      const usageData: ActivityUsage[] = Array.from(usageMap.entries())
+        .map(([activity_name, completion_count]) => ({
+          activity_name,
+          completion_count
+        }))
+        .sort((a, b) => b.completion_count - a.completion_count);
+
+      setActivityUsage(usageData);
+    } catch (error) {
+      console.error('Error fetching activity usage:', error);
+    }
+  };
+
   useEffect(() => {
     checkAdminAccess().then(() => {
       fetchAnalytics();
+      fetchDailyUsers();
+      fetchActivityUsage();
     });
   }, []);
 
@@ -169,11 +244,73 @@ export default function Analytics() {
           </div>
         </Card>
 
+        {/* Daily Active Users */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5" />
+              Daily Active Users (Last 7 Days)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {dailyUsers.length > 0 ? (
+              <div className="space-y-2">
+                {dailyUsers.slice(-7).map((day) => (
+                  <div key={day.date} className="flex items-center justify-between p-3 rounded bg-muted/50">
+                    <span className="text-sm font-medium">{day.date}</span>
+                    <span className="text-sm font-bold text-primary">{day.count} users</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted-foreground text-center py-4">No activity data available</p>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Most Used Activities */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5" />
+              Most Popular Activities
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {activityUsage.length > 0 ? (
+              <div className="space-y-3">
+                {activityUsage.map((activity, index) => (
+                  <div key={activity.activity_name} className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">
+                        {index + 1}. {activity.activity_name}
+                      </span>
+                      <span className="text-sm font-bold text-primary">
+                        {activity.completion_count} completions
+                      </span>
+                    </div>
+                    <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-primary transition-all"
+                        style={{ 
+                          width: `${(activity.completion_count / activityUsage[0].completion_count) * 100}%` 
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted-foreground text-center py-4">No activity data available</p>
+            )}
+          </CardContent>
+        </Card>
+
         <div className="flex justify-between items-center">
           <p className="text-sm text-muted-foreground">
             Last updated: {analytics?.updated_at ? new Date(analytics.updated_at).toLocaleString() : 'Never'}
           </p>
-          <Button onClick={fetchAnalytics} variant="outline">
+          <Button onClick={() => { fetchAnalytics(); fetchDailyUsers(); fetchActivityUsage(); }} variant="outline">
             Refresh Data
           </Button>
         </div>

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Play, Pause, RotateCcw } from "lucide-react";
+import { ArrowLeft, Play, Pause, RotateCcw, Headphones } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ActivityCompletion from "@/components/ActivityCompletion";
+import { Badge } from "@/components/ui/badge";
 
 type Phase = "inhale" | "hold" | "exhale" | "rest";
 
@@ -26,6 +27,7 @@ export default function BreathingTimer() {
   const [currentPhase, setCurrentPhase] = useState<Phase>("inhale");
   const [timeLeft, setTimeLeft] = useState(breathingCycle.inhale.duration);
   const [cycleCount, setCycleCount] = useState(0);
+  const [showMeditation, setShowMeditation] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -110,10 +112,121 @@ export default function BreathingTimer() {
 
       <Card className="overflow-hidden">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl">Mindful Breathing</CardTitle>
-          <p className="text-muted-foreground">Find your calm with guided breathing</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-3xl">Mindful Breathing</CardTitle>
+              <p className="text-muted-foreground">Find your calm with guided breathing or meditation</p>
+            </div>
+            <Button
+              variant={showMeditation ? "default" : "outline"}
+              onClick={() => setShowMeditation(!showMeditation)}
+              className="gap-2"
+            >
+              <Headphones className="h-4 w-4" />
+              {showMeditation ? "Hide" : "Show"} Meditation
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-8 pb-8">
+          {/* Guided Meditation Section */}
+          {showMeditation && (
+            <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/20">
+              <CardContent className="pt-6 space-y-4">
+                <h3 className="text-xl font-semibold text-center mb-4">Choose Your Guided Meditation</h3>
+                
+                <div className="grid gap-4 md:grid-cols-2">
+                  {/* 5-Minute Meditation */}
+                  <Card className="hover:shadow-lg transition-shadow">
+                    <CardContent className="pt-6">
+                      <div className="space-y-3">
+                        <Badge className="bg-primary">5 Minutes</Badge>
+                        <h4 className="font-semibold">Quick Calm Meditation</h4>
+                        <p className="text-sm text-muted-foreground">
+                          A brief guided session to center yourself and find inner peace
+                        </p>
+                        <iframe
+                          className="w-full h-40 rounded-lg"
+                          src="https://www.youtube.com/embed/inpok4MKVLM"
+                          title="5 Minute Guided Meditation"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* 10-Minute Meditation */}
+                  <Card className="hover:shadow-lg transition-shadow">
+                    <CardContent className="pt-6">
+                      <div className="space-y-3">
+                        <Badge className="bg-secondary">10 Minutes</Badge>
+                        <h4 className="font-semibold">Deep Relaxation</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Experience profound relaxation and stress relief
+                        </p>
+                        <iframe
+                          className="w-full h-40 rounded-lg"
+                          src="https://www.youtube.com/embed/z6X5oEIg6Ak"
+                          title="10 Minute Guided Meditation"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* 15-Minute Meditation */}
+                  <Card className="hover:shadow-lg transition-shadow">
+                    <CardContent className="pt-6">
+                      <div className="space-y-3">
+                        <Badge className="bg-accent">15 Minutes</Badge>
+                        <h4 className="font-semibold">Anxiety Relief</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Release anxiety and cultivate inner peace
+                        </p>
+                        <iframe
+                          className="w-full h-40 rounded-lg"
+                          src="https://www.youtube.com/embed/O-6f5wQXSu8"
+                          title="15 Minute Anxiety Relief Meditation"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* 20-Minute Meditation */}
+                  <Card className="hover:shadow-lg transition-shadow">
+                    <CardContent className="pt-6">
+                      <div className="space-y-3">
+                        <Badge>20 Minutes</Badge>
+                        <h4 className="font-semibold">Deepak Chopra Style</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Deep spiritual meditation for transformation
+                        </p>
+                        <iframe
+                          className="w-full h-40 rounded-lg"
+                          src="https://www.youtube.com/embed/8VfjR5RAXVM"
+                          title="20 Minute Deep Meditation"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <Card className="bg-muted/50 mt-4">
+                  <CardContent className="pt-4">
+                    <p className="text-sm text-muted-foreground text-center">
+                      💡 Tip: Use headphones for the best meditation experience. Find a quiet space where you won't be disturbed.
+                    </p>
+                  </CardContent>
+                </Card>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Breathing Circle */}
           <div className="relative flex items-center justify-center h-80">
             {/* Outer glow rings */}
