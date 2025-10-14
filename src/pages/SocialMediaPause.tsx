@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Sparkles, Instagram, Facebook, Twitter, Youtube, MessageCircle, TrendingUp } from "lucide-react";
+import { ArrowLeft, Sparkles, Instagram, Facebook, Hash, Youtube, MessageCircle, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -18,7 +18,7 @@ interface SocialApp {
 const defaultApps: SocialApp[] = [
   { id: "instagram", name: "Instagram", icon: Instagram, color: "from-pink-500 to-purple-500", isPaused: false },
   { id: "facebook", name: "Facebook", icon: Facebook, color: "from-blue-600 to-blue-400", isPaused: false },
-  { id: "twitter", name: "Twitter", icon: Twitter, color: "from-blue-400 to-cyan-400", isPaused: false },
+  { id: "twitter", name: "X (Twitter)", icon: Hash, color: "from-gray-800 to-gray-600", isPaused: false },
   { id: "youtube", name: "YouTube", icon: Youtube, color: "from-red-600 to-red-400", isPaused: false },
   { id: "tiktok", name: "TikTok", icon: MessageCircle, color: "from-gray-800 to-cyan-400", isPaused: false },
   { id: "snapchat", name: "Snapchat", icon: MessageCircle, color: "from-yellow-400 to-yellow-300", isPaused: false }
