@@ -1,4 +1,4 @@
-import { Home, BookOpen, TrendingUp, Sparkles, Heart, MessageCircle, LogOut, Settings } from "lucide-react";
+import { Home, BookOpen, TrendingUp, Sparkles, Heart, MessageCircle, LogOut, Settings, Trophy } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -20,6 +20,7 @@ const items = [
   { title: "Vent Space", url: "/vent", icon: MessageCircle },
   { title: "Progress", url: "/progress", icon: TrendingUp },
   { title: "Activities", url: "/activities", icon: Sparkles },
+  { title: "Rewards", url: "/rewards", icon: Trophy },
   { title: "Clean Counter", url: "/clean", icon: Heart },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
@@ -50,7 +51,7 @@ export function AppSidebar() {
     <Sidebar className={open ? "w-60" : "w-16"} collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-primary font-semibold text-lg mb-2">
+          <SidebarGroupLabel className="text-primary font-semibold text-lg mb-2 cursor-pointer hover:text-primary/80 transition-colors" onClick={() => navigate("/")}>
             {open && "MindfulMe"}
           </SidebarGroupLabel>
           <SidebarGroupContent>

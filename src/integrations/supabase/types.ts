@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      check_ins: {
+        Row: {
+          answers: Json | null
+          created_at: string
+          id: string
+          mood: number
+          user_id: string
+        }
+        Insert: {
+          answers?: Json | null
+          created_at?: string
+          id?: string
+          mood: number
+          user_id: string
+        }
+        Update: {
+          answers?: Json | null
+          created_at?: string
+          id?: string
+          mood?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -31,6 +55,92 @@ export type Database = {
           username?: string | null
         }
         Relationships: []
+      }
+      user_rewards: {
+        Row: {
+          description: string | null
+          earned_at: string
+          id: string
+          metadata: Json | null
+          reward_name: string
+          reward_type: string
+          user_id: string
+        }
+        Insert: {
+          description?: string | null
+          earned_at?: string
+          id?: string
+          metadata?: Json | null
+          reward_name: string
+          reward_type: string
+          user_id: string
+        }
+        Update: {
+          description?: string | null
+          earned_at?: string
+          id?: string
+          metadata?: Json | null
+          reward_name?: string
+          reward_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      vent_conversations: {
+        Row: {
+          created_at: string
+          id: string
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      vent_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          role: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          role: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vent_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "vent_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

@@ -31,8 +31,49 @@ export default function CheckIn() {
     activities: string[];
     reasoning: string;
   } | null>(null);
+  const [newRewards, setNewRewards] = useState<string[]>([]);
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  const checkAndAwardRewards = async (userId: string, streak: number) => {
+    const rewardsToGive: Array<{reward_type: string, reward_name: string, description: string}> = [];
+
+    const { data: existingRewards } = await supabase
+      .from('user_rewards')
+      .select('reward_type')
+      .eq('user_id', userId);
+
+    const hasReward = (type: string) => existingRewards?.some(r => r.reward_type === type);
+
+    if (streak >= 3 && !hasReward('streak_3')) {
+      rewardsToGive.push({
+        reward_type: 'streak_3',
+        reward_name: '3-Day Warrior 🔥',
+        description: 'Checked in for 3 days straight!'
+      });
+    }
+    if (streak >= 7 && !hasReward('streak_7')) {
+      rewardsToGive.push({
+        reward_type: 'streak_7',
+        reward_name: 'Week Champion ⭐',
+        description: 'A full week of check-ins!'
+      });
+    }
+    if (streak >= 30 && !hasReward('streak_30')) {
+      rewardsToGive.push({
+        reward_type: 'streak_30',
+        reward_name: 'Monthly Master 🏆',
+        description: '30 days of dedication!'
+      });
+    }
+
+    if (rewardsToGive.length > 0) {
+      await supabase.from('user_rewards').insert(
+        rewardsToGive.map(r => ({ ...r, user_id: userId }))
+      );
+      setNewRewards(rewardsToGive.map(r => r.reward_name));
+    }
+  };
 
   const handleMoodSelect = (value: number) => {
     setSelectedMood(value);
@@ -55,36 +96,49 @@ export default function CheckIn() {
   };
 
   const handleComplete = async () => {
-    const checkIn = {
-      date: new Date().toISOString(),
-      mood: selectedMood,
-      answers,
-    };
-
-    const existingData = localStorage.getItem("checkIns");
-    const checkIns = existingData ? JSON.parse(existingData) : [];
-    checkIns.push(checkIn);
-    localStorage.setItem("checkIns", JSON.stringify(checkIns));
-
-    const today = new Date().toDateString();
-    const lastCheckIn = localStorage.getItem("lastCheckIn");
-    const streak = localStorage.getItem("streak");
+    setStep("loading");
     
-    if (lastCheckIn !== today) {
-      const newStreak = lastCheckIn === new Date(Date.now() - 86400000).toDateString() 
-        ? (parseInt(streak || "0") + 1).toString()
-        : "1";
-      localStorage.setItem("streak", newStreak);
-      localStorage.setItem("lastCheckIn", today);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    // Save check-in to database
+    await supabase
+      .from('check_ins')
+      .insert({
+        user_id: user.id,
+        mood: selectedMood || 3,
+        answers
+      });
+
+    // Calculate streak from database
+    const { data: checkIns } = await supabase
+      .from('check_ins')
+      .select('created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false });
+
+    let currentStreak = 1;
+    if (checkIns && checkIns.length > 1) {
+      const dates = checkIns.map(c => new Date(c.created_at).toDateString());
+      for (let i = 1; i < dates.length; i++) {
+        const prevDate = new Date(dates[i-1]);
+        const currDate = new Date(dates[i]);
+        const diffDays = Math.floor((prevDate.getTime() - currDate.getTime()) / (1000 * 60 * 60 * 24));
+        if (diffDays === 1) {
+          currentStreak++;
+        } else {
+          break;
+        }
+      }
     }
 
-    // Show loading state
-    setStep("loading");
+    await checkAndAwardRewards(user.id, currentStreak);
+    localStorage.setItem("streak", currentStreak.toString());
 
-    // Get AI recommendations
+    // Get AI recommendations with progressive difficulty
     try {
       const { data, error } = await supabase.functions.invoke("recommend-activities", {
-        body: { mood: selectedMood, answers }
+        body: { mood: selectedMood, answers, streak: currentStreak }
       });
 
       if (error) throw error;
@@ -98,7 +152,6 @@ export default function CheckIn() {
       });
     } catch (error) {
       console.error("Error getting recommendations:", error);
-      // Fallback to basic recommendations
       setStep("complete");
       toast({
         title: "Check-in complete! 🎉",
@@ -162,6 +215,19 @@ export default function CheckIn() {
     
     return (
       <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
+        {newRewards.length > 0 && (
+          <Card className="border-primary bg-gradient-to-r from-primary/20 to-secondary/20">
+            <CardContent className="pt-6">
+              <div className="text-center space-y-2">
+                <div className="text-4xl mb-2">🏆</div>
+                <h3 className="font-semibold text-lg">New Rewards Unlocked!</h3>
+                {newRewards.map((reward, idx) => (
+                  <p key={idx} className="text-primary font-medium">{reward}</p>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
         <Card className="border-primary/20 shadow-lg">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 text-6xl">✨</div>

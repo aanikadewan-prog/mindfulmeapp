@@ -10,7 +10,8 @@ const corsHeaders = {
 // Input validation schema
 const RecommendActivitiesSchema = z.object({
   mood: z.number().int().min(1).max(5),
-  answers: z.record(z.boolean()).optional()
+  answers: z.record(z.boolean()).optional(),
+  streak: z.number().int().min(0).optional()
 });
 
 serve(async (req) => {
@@ -53,7 +54,7 @@ serve(async (req) => {
       );
     }
 
-    const { mood, answers } = parsed.data;
+    const { mood, answers, streak } = parsed.data;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
@@ -75,6 +76,16 @@ serve(async (req) => {
         return `${labels[key] || key}: ${value ? "Yes" : "No"}`;
       })
       .join(", ");
+
+    const streakContext = streak && streak > 0 
+      ? `\n\nUser has a ${streak}-day check-in streak! ${
+          streak >= 7 
+            ? "They've shown great commitment. Suggest more challenging or diverse activities to keep them engaged."
+            : streak >= 3
+            ? "They're building consistency. Mix familiar activities with slightly new ones."
+            : "They're just starting their journey. Keep activities simple and achievable."
+        }`
+      : "";
 
     const systemPrompt = `You are a compassionate mental health assistant helping teens and young adults with their wellbeing. 
 Based on their daily check-in, recommend 3-4 specific activities from the app that would help them most right now.
@@ -99,8 +110,9 @@ Consider:
 - If low energy: suggest gentle, achievable activities
 - If anxious: breathing and relaxation techniques
 - If lacking self-care basics (sleep, hydration, movement): gentle reminders
+- Progressive difficulty: For users with longer streaks, suggest more challenging or varied activities to prevent boredom
 - Keep language warm, supportive, never judgmental
-- Use 💜 emoji occasionally for warmth
+- Use 💜 emoji occasionally for warmth${streakContext}
 
 Respond with ONLY a JSON object in this exact format (no markdown, no extra text):
 {

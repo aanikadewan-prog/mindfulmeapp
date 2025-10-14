@@ -26,6 +26,7 @@ import ProgressiveRelaxation from "./pages/ProgressiveRelaxation";
 import GentleStretching from "./pages/GentleStretching";
 import CleanCounter from "./pages/CleanCounter";
 import Vent from "./pages/Vent";
+import Rewards from "./pages/Rewards";
 import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -84,6 +85,7 @@ const App = () => {
                     <Route path="/gentle-stretching" element={<ProtectedRoute><GentleStretching /></ProtectedRoute>} />
                     <Route path="/clean" element={<ProtectedRoute><CleanCounter /></ProtectedRoute>} />
                     <Route path="/vent" element={<ProtectedRoute><Vent /></ProtectedRoute>} />
+                    <Route path="/rewards" element={<ProtectedRoute><Rewards /></ProtectedRoute>} />
                     <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
