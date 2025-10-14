@@ -266,7 +266,7 @@ export default function CheckIn() {
                 variant="secondary"
                 className="w-full"
               >
-                See All Activities
+                Browse All Activities
               </Button>
               <Button
                 onClick={() => {
