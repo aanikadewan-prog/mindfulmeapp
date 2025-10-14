@@ -29,9 +29,22 @@ export default function Auth() {
 
   useEffect(() => {
     // Check if user is already logged in
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session) {
-        navigate("/");
+        // Check if user has completed onboarding
+        const { data: preferences } = await supabase
+          .from('user_preferences')
+          .select('onboarding_completed')
+          .eq('user_id', session.user.id)
+          .maybeSingle();
+        
+        if (preferences && !preferences.onboarding_completed) {
+          navigate('/onboarding');
+        } else if (!preferences) {
+          navigate('/onboarding');
+        } else {
+          navigate('/');
+        }
       }
     });
 
@@ -89,19 +102,37 @@ export default function Auth() {
             variant: "destructive",
           });
         } else {
-          toast({
-            title: "Welcome back! 💜",
-            description: "You're logged in",
-          });
+          // Get user session to check onboarding status
+          const { data: { session } } = await supabase.auth.getSession();
+          
+          if (session) {
+            // Check if user has completed onboarding
+            const { data: preferences } = await supabase
+              .from('user_preferences')
+              .select('onboarding_completed')
+              .eq('user_id', session.user.id)
+              .maybeSingle();
+            
+            toast({
+              title: "Welcome back! 💜",
+              description: "You're logged in",
+            });
 
-          // Offer to set up biometric after successful login
-          if (biometricAvailable && !biometricEmail) {
-            setTimeout(() => {
-              offerBiometricSetup(email);
-            }, 1000);
+            // Offer to set up biometric after successful login
+            if (biometricAvailable && !biometricEmail) {
+              setTimeout(() => {
+                offerBiometricSetup(email);
+              }, 1000);
+            }
+
+            if (preferences && !preferences.onboarding_completed) {
+              navigate('/onboarding');
+            } else if (!preferences) {
+              navigate('/onboarding');
+            } else {
+              navigate('/');
+            }
           }
-
-          navigate("/");
         }
       } else {
         const redirectUrl = `${window.location.origin}/`;
@@ -128,7 +159,7 @@ export default function Auth() {
             title: "Welcome to MindfulMe! 🌟",
             description: "Your account has been created",
           });
-          navigate("/");
+          navigate("/onboarding");
         }
       }
     } catch (error) {

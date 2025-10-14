@@ -30,6 +30,8 @@ import Rewards from "./pages/Rewards";
 import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import Onboarding from "./pages/Onboarding";
+import Analytics from "./pages/Analytics";
 import { useEffect } from "react";
 import { initializeNotifications } from "./utils/notifications";
 
@@ -87,6 +89,8 @@ const App = () => {
                     <Route path="/vent" element={<ProtectedRoute><Vent /></ProtectedRoute>} />
                     <Route path="/rewards" element={<ProtectedRoute><Rewards /></ProtectedRoute>} />
                     <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                    <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
+                    <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </div>

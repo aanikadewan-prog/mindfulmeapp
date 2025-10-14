@@ -56,6 +56,72 @@ export type Database = {
         }
         Relationships: []
       }
+      user_analytics: {
+        Row: {
+          active_this_week: number
+          active_today: number
+          avg_mood: number | null
+          id: string
+          total_activities_completed: number
+          total_check_ins: number
+          total_users: number
+          updated_at: string
+        }
+        Insert: {
+          active_this_week?: number
+          active_today?: number
+          avg_mood?: number | null
+          id?: string
+          total_activities_completed?: number
+          total_check_ins?: number
+          total_users?: number
+          updated_at?: string
+        }
+        Update: {
+          active_this_week?: number
+          active_today?: number
+          avg_mood?: number | null
+          id?: string
+          total_activities_completed?: number
+          total_check_ins?: number
+          total_users?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          created_at: string
+          daily_plan_enabled: boolean
+          goals: string[]
+          id: string
+          onboarding_completed: boolean
+          topics: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          daily_plan_enabled?: boolean
+          goals?: string[]
+          id?: string
+          onboarding_completed?: boolean
+          topics?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          daily_plan_enabled?: boolean
+          goals?: string[]
+          id?: string
+          onboarding_completed?: boolean
+          topics?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_rewards: {
         Row: {
           description: string | null
@@ -147,7 +213,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_user_analytics: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
