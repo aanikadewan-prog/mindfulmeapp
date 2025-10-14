@@ -177,16 +177,25 @@ export default function CheckIn() {
     "Breathing Timer": "/breathing",
     "Gentle Stretching": "/gentle-stretching",
     "Progressive Relaxation": "/progressive-relaxation",
-    "Morning Ritual": "/morning-ritual",
-    "Mindful Tea": "/mindful-tea",
+    "Morning Ritual": "/morning",
+    "Mindful Tea": "/tea",
     "Short Walk": "/short-walk",
-    "Soothing Sounds": "/soothing-sounds",
+    "Soothing Sounds": "/sounds",
     "Gratitude Practice": "/gratitude",
     "Self-Compassion": "/self-compassion",
     "Phone-Free Hour": "/phone-free",
-    "Social Media Pause": "/social-media-pause",
+    "Social Media Pause": "/social-pause",
     "Evening Wind-Down": "/evening-wind-down",
     "Journal": "/journal"
+  };
+
+  const handleActivityClick = (activity: string) => {
+    const route = activityRoutes[activity];
+    if (route) {
+      navigate(route);
+    } else {
+      navigate("/activities");
+    }
   };
 
   if (step === "loading") {
@@ -244,14 +253,7 @@ export default function CheckIn() {
                   <Button
                     key={activity}
                     variant="outline"
-                    onClick={() => {
-                      const route = activityRoutes[activity];
-                      if (route) {
-                        navigate(route);
-                      } else {
-                        navigate("/activities");
-                      }
-                    }}
+                    onClick={() => handleActivityClick(activity)}
                     className="w-full justify-start text-left h-auto py-3 px-4 border-primary/30 hover:bg-primary/10"
                   >
                     <span className="font-medium">{activity}</span>

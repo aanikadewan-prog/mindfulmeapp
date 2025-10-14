@@ -138,6 +138,8 @@ Respond with ONLY a JSON object in this exact format (no markdown, no extra text
             content: `User check-in: Mood: ${moodText}. ${answersText || "No wellness questions answered yet."}` 
           }
         ],
+        temperature: 0.7,
+        max_tokens: 150
       }),
     });
 

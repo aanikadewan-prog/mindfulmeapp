@@ -26,35 +26,35 @@ const sounds: Sound[] = [
     name: "Ocean Waves",
     emoji: "🌊",
     description: "Calming waves on the shore",
-    url: "https://cdn.pixabay.com/audio/2021/08/04/audio_12b0c7443c.mp3"
+    url: "https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3"
   },
   {
     id: "forest",
     name: "Forest Birds",
     emoji: "🌲",
     description: "Morning birds chirping",
-    url: "https://cdn.pixabay.com/audio/2022/03/10/audio_4dedf655e1.mp3"
+    url: "https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3"
   },
   {
     id: "fire",
     name: "Crackling Fire",
     emoji: "🔥",
     description: "Warm fireplace ambience",
-    url: "https://cdn.pixabay.com/audio/2022/03/10/audio_9a80e93c5c.mp3"
+    url: "https://cdn.pixabay.com/audio/2021/08/09/audio_dbbf8c0db3.mp3"
   },
   {
     id: "wind",
     name: "Gentle Wind",
     emoji: "🍃",
     description: "Wind through trees",
-    url: "https://cdn.pixabay.com/audio/2022/03/12/audio_7c6f97e1e3.mp3"
+    url: "https://cdn.pixabay.com/audio/2022/03/24/audio_c610232401.mp3"
   },
   {
     id: "stream",
     name: "Flowing Stream",
     emoji: "💧",
     description: "Babbling brook sounds",
-    url: "https://cdn.pixabay.com/audio/2024/08/10/audio_98fd297c00.mp3"
+    url: "https://cdn.pixabay.com/audio/2022/06/07/audio_b9bd4170e4.mp3"
   }
 ];
 
