@@ -8,9 +8,38 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Validate base64 and enforce size limits
+const validateBase64Audio = (audio: string): string => {
+  // Check if it's valid base64
+  if (!/^[A-Za-z0-9+/=]+$/.test(audio)) {
+    throw new Error("Invalid base64 format");
+  }
+  
+  // Calculate approximate size (base64 is ~33% larger than binary)
+  const sizeInBytes = (audio.length * 3) / 4;
+  const maxSize = 10 * 1024 * 1024; // 10MB limit
+  
+  if (sizeInBytes > maxSize) {
+    throw new Error("Audio file too large (max 10MB)");
+  }
+  
+  return audio;
+};
+
 // Input validation schema - max 10MB base64 (~7.5MB raw audio)
 const TranscribeAudioSchema = z.object({
-  audio: z.string().min(1).max(13_333_333) // ~10MB in base64
+  audio: z.string()
+    .min(1, "Audio data is required")
+    .refine((val) => {
+      try {
+        validateBase64Audio(val);
+        return true;
+      } catch {
+        return false;
+      }
+    }, {
+      message: "Invalid or oversized audio data (max 10MB)"
+    })
 });
 
 serve(async (req) => {

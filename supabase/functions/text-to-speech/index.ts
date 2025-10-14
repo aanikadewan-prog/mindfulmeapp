@@ -9,8 +9,20 @@ const corsHeaders = {
 };
 
 // Input validation schema
+// Sanitize text to prevent injection
+const sanitizeText = (text: string): string => {
+  // Remove HTML tags and excessive whitespace
+  return text
+    .replace(/<[^>]+>/g, '')
+    .trim()
+    .slice(0, 4000);
+};
+
 const TextToSpeechSchema = z.object({
-  text: z.string().min(1).max(4000)
+  text: z.string()
+    .min(1, "Text cannot be empty")
+    .max(4000, "Text too long (max 4000 characters)")
+    .transform(sanitizeText)
 });
 
 serve(async (req) => {

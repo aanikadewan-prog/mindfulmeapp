@@ -7,11 +7,19 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Define strict schema for answers to prevent arbitrary data
+const AnswersSchema = z.object({
+  sleep: z.boolean().optional(),
+  hydration: z.boolean().optional(),
+  movement: z.boolean().optional(),
+  social: z.boolean().optional()
+}).strict();
+
 // Input validation schema
 const RecommendActivitiesSchema = z.object({
   mood: z.number().int().min(1).max(5),
-  answers: z.record(z.boolean()).optional(),
-  streak: z.number().int().min(0).optional()
+  answers: AnswersSchema.optional(),
+  streak: z.number().int().min(0).max(10000).optional()
 });
 
 serve(async (req) => {

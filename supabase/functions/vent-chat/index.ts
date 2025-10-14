@@ -7,13 +7,28 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Sanitize text to prevent prompt injection
+const sanitizeText = (text: string): string => {
+  // Remove potential script tags and excessive whitespace
+  return text
+    .replace(/<script[^>]*>.*?<\/script>/gi, '')
+    .replace(/<[^>]+>/g, '')
+    .trim()
+    .slice(0, 2000);
+};
+
 // Input validation schema
 const VentChatSchema = z.object({
-  message: z.string().min(1).max(2000),
+  message: z.string()
+    .min(1, "Message cannot be empty")
+    .max(2000, "Message too long")
+    .transform(sanitizeText),
   conversationHistory: z.array(z.object({
     role: z.enum(['user', 'assistant']),
-    content: z.string().max(2000)
-  })).max(50).optional()
+    content: z.string()
+      .max(2000)
+      .transform(sanitizeText)
+  })).max(50, "Conversation history too long").optional()
 });
 
 serve(async (req) => {
