@@ -307,7 +307,11 @@ export default function Activities() {
       "Gratitude Practice": "/gratitude",
       "Self-Compassion": "/self-compassion",
       "Phone-Free Hour": "/phone-free",
-      "Social Media Pause": "/social-pause"
+      "Social Media Pause": "/social-pause",
+      "Evening Wind-Down": "/evening-wind-down",
+      "Short Walk": "/short-walk",
+      "Progressive Relaxation": "/progressive-relaxation",
+      "Gentle Stretching": "/gentle-stretching"
     };
 
     const route = routeMap[activity.title];

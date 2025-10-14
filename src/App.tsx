@@ -20,6 +20,10 @@ import GratitudePractice from "./pages/GratitudePractice";
 import SelfCompassion from "./pages/SelfCompassion";
 import PhoneFreeHour from "./pages/PhoneFreeHour";
 import SocialMediaPause from "./pages/SocialMediaPause";
+import EveningWindDown from "./pages/EveningWindDown";
+import ShortWalk from "./pages/ShortWalk";
+import ProgressiveRelaxation from "./pages/ProgressiveRelaxation";
+import GentleStretching from "./pages/GentleStretching";
 import CleanCounter from "./pages/CleanCounter";
 import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
@@ -73,6 +77,10 @@ const App = () => {
                     <Route path="/self-compassion" element={<ProtectedRoute><SelfCompassion /></ProtectedRoute>} />
                     <Route path="/phone-free" element={<ProtectedRoute><PhoneFreeHour /></ProtectedRoute>} />
                     <Route path="/social-pause" element={<ProtectedRoute><SocialMediaPause /></ProtectedRoute>} />
+                    <Route path="/evening-wind-down" element={<ProtectedRoute><EveningWindDown /></ProtectedRoute>} />
+                    <Route path="/short-walk" element={<ProtectedRoute><ShortWalk /></ProtectedRoute>} />
+                    <Route path="/progressive-relaxation" element={<ProtectedRoute><ProgressiveRelaxation /></ProtectedRoute>} />
+                    <Route path="/gentle-stretching" element={<ProtectedRoute><GentleStretching /></ProtectedRoute>} />
                     <Route path="/clean" element={<ProtectedRoute><CleanCounter /></ProtectedRoute>} />
                     <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                     <Route path="*" element={<NotFound />} />
