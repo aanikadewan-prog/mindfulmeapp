@@ -25,9 +25,9 @@ const steps: Step[] = [
   },
   {
     id: 2,
-    title: "Put Phone Away",
+    title: "Minimize Distractions",
     duration: 30,
-    instruction: "Place your phone on silent and across the room. You won't need it for the next 30 minutes.",
+    instruction: "Put your phone on Do Not Disturb mode. Close any other apps or tabs. This time is just for you.",
     icon: "📱"
   },
   {
