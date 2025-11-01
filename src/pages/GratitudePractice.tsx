@@ -6,6 +6,7 @@ import { ArrowLeft, Heart, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import ActivityCompletion from "@/components/ActivityCompletion";
+import { supabase } from "@/integrations/supabase/client";
 
 interface GratitudeEntry {
   date: string;
@@ -20,30 +21,70 @@ export default function GratitudePractice() {
   const [todayEntry, setTodayEntry] = useState<GratitudeEntry | null>(null);
 
   useEffect(() => {
-    const today = new Date().toDateString();
-    const saved = localStorage.getItem(`gratitude_${today}`);
-    if (saved) {
-      const entry = JSON.parse(saved);
-      setTodayEntry(entry);
-      setItem1(entry.items[0]);
-      setItem2(entry.items[1]);
-      setItem3(entry.items[2]);
-    }
+    loadTodayEntry();
   }, []);
 
-  const handleSave = () => {
+  const loadTodayEntry = async () => {
+    const today = new Date().toISOString().split('T')[0];
+    const { data, error } = await supabase
+      .from('gratitude_entries')
+      .select('*')
+      .gte('created_at', `${today}T00:00:00`)
+      .lte('created_at', `${today}T23:59:59`)
+      .order('created_at', { ascending: false })
+      .limit(3);
+    
+    if (!error && data && data.length === 3) {
+      setItem1(data[2].entry);
+      setItem2(data[1].entry);
+      setItem3(data[0].entry);
+      setTodayEntry({
+        date: new Date().toDateString(),
+        items: [data[2].entry, data[1].entry, data[0].entry]
+      });
+    }
+  };
+
+  const handleSave = async () => {
     if (!item1.trim() || !item2.trim() || !item3.trim()) {
       toast.error("Please fill in all three items");
       return;
     }
 
-    const today = new Date().toDateString();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to save your gratitude");
+      return;
+    }
+
+    // Delete today's entries first
+    const today = new Date().toISOString().split('T')[0];
+    await supabase
+      .from('gratitude_entries')
+      .delete()
+      .gte('created_at', `${today}T00:00:00`)
+      .lte('created_at', `${today}T23:59:59`)
+      .eq('user_id', user.id);
+
+    // Insert new entries
+    const { error } = await supabase
+      .from('gratitude_entries')
+      .insert([
+        { user_id: user.id, entry: item1.trim() },
+        { user_id: user.id, entry: item2.trim() },
+        { user_id: user.id, entry: item3.trim() }
+      ]);
+
+    if (error) {
+      toast.error("Error saving gratitude. Please try again.");
+      return;
+    }
+
     const entry: GratitudeEntry = {
-      date: today,
+      date: new Date().toDateString(),
       items: [item1.trim(), item2.trim(), item3.trim()]
     };
 
-    localStorage.setItem(`gratitude_${today}`, JSON.stringify(entry));
     setTodayEntry(entry);
     toast.success("Your gratitude has been saved 💜");
   };

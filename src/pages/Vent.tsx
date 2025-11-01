@@ -13,6 +13,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { z } from "zod";
+
+const messageSchema = z.object({
+  message: z.string()
+    .trim()
+    .min(1, "Message cannot be empty")
+    .max(2000, "Message is too long (max 2000 characters)")
+});
 
 interface Message {
   role: "user" | "assistant";
@@ -175,7 +183,19 @@ export default function Vent() {
 
   const sendMessage = async (messageText?: string) => {
     const text = messageText || input;
-    if (!text.trim() || isLoading) return;
+    
+    // Client-side validation
+    const validation = messageSchema.safeParse({ message: text });
+    if (!validation.success) {
+      toast({
+        title: "Invalid message",
+        description: validation.error.errors[0].message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (isLoading) return;
 
     const userMessage: Message = { role: "user", content: text };
     setMessages(prev => [...prev, userMessage]);
@@ -200,7 +220,6 @@ export default function Vent() {
         await saveMessage("assistant", data.reply);
       }
     } catch (error) {
-      console.error("Error sending message:", error);
       toast({
         title: "Connection issue",
         description: "Couldn't send message. Try again?",

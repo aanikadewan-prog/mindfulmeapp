@@ -6,6 +6,7 @@ import { ArrowLeft, Sunrise, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import ActivityCompletion from "@/components/ActivityCompletion";
+import { supabase } from "@/integrations/supabase/client";
 
 interface RitualStep {
   id: string;
@@ -25,24 +26,57 @@ const initialSteps: RitualStep[] = [
 
 export default function MorningRitual() {
   const navigate = useNavigate();
-  const [steps, setSteps] = useState<RitualStep[]>(() => {
-    const saved = localStorage.getItem("morningRitualSteps");
-    if (saved) {
-      const savedSteps = JSON.parse(saved);
-      const lastReset = localStorage.getItem("morningRitualLastReset");
-      const today = new Date().toDateString();
-      
-      if (lastReset !== today) {
-        return initialSteps;
-      }
-      return savedSteps;
-    }
-    return initialSteps;
-  });
+  const [steps, setSteps] = useState<RitualStep[]>(initialSteps);
 
   useEffect(() => {
-    localStorage.setItem("morningRitualSteps", JSON.stringify(steps));
+    loadRitualData();
+  }, []);
+
+  useEffect(() => {
+    saveRitualData();
   }, [steps]);
+
+  const loadRitualData = async () => {
+    const { data, error } = await supabase
+      .from('morning_ritual_progress')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    
+    if (!error && data) {
+      const today = new Date().toDateString();
+      const lastResetDate = new Date(data.last_reset_date).toDateString();
+      
+      if (lastResetDate === today) {
+        setSteps(data.steps as unknown as RitualStep[]);
+      } else {
+        // New day, reset to initial steps
+        setSteps(initialSteps);
+      }
+    }
+  };
+
+  const saveRitualData = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const today = new Date().toISOString().split('T')[0];
+
+    // Delete old entry and insert new one
+    await supabase
+      .from('morning_ritual_progress')
+      .delete()
+      .eq('user_id', user.id);
+
+    await supabase
+      .from('morning_ritual_progress')
+      .insert({
+        user_id: user.id,
+        steps: steps as any,
+        last_reset_date: today
+      });
+  };
 
   const toggleStep = (id: string) => {
     setSteps(steps.map(step => 
@@ -52,7 +86,6 @@ export default function MorningRitual() {
 
   const resetSteps = () => {
     setSteps(initialSteps);
-    localStorage.setItem("morningRitualLastReset", new Date().toDateString());
     toast.success("Morning ritual reset! Start fresh 🌅");
   };
 

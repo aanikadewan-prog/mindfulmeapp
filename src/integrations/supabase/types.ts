@@ -62,6 +62,105 @@ export type Database = {
         }
         Relationships: []
       }
+      clean_counter_data: {
+        Row: {
+          created_at: string
+          id: string
+          milestones: Json
+          start_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          milestones?: Json
+          start_date: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          milestones?: Json
+          start_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      gratitude_entries: {
+        Row: {
+          created_at: string
+          entry: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          entry: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          entry?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      journal_entries: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          prompt: string | null
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          prompt?: string | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          prompt?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      morning_ritual_progress: {
+        Row: {
+          created_at: string
+          id: string
+          last_reset_date: string
+          steps: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_reset_date: string
+          steps: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_reset_date?: string
+          steps?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -265,10 +364,7 @@ export type Database = {
         }
         Returns: boolean
       }
-      update_user_analytics: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      update_user_analytics: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "user"

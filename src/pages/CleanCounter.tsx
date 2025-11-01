@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function CleanCounter() {
   const [startDate, setStartDate] = useState<string | null>(null);
@@ -19,16 +20,52 @@ export default function CleanCounter() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const saved = localStorage.getItem("cleanCounterStart");
-    if (saved) {
-      setStartDate(saved);
-      setIsTracking(true);
-    }
+    loadCounterData();
   }, []);
 
-  const startCounter = () => {
+  const loadCounterData = async () => {
+    const { data, error } = await supabase
+      .from('clean_counter_data')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    
+    if (!error && data) {
+      setStartDate(data.start_date);
+      setIsTracking(true);
+    }
+  };
+
+  const startCounter = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast({
+        title: "Not authenticated",
+        description: "Please log in to start tracking",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const now = new Date().toISOString();
-    localStorage.setItem("cleanCounterStart", now);
+    const { error } = await supabase
+      .from('clean_counter_data')
+      .insert({
+        user_id: user.id,
+        start_date: now,
+        milestones: []
+      });
+
+    if (error) {
+      toast({
+        title: "Error starting counter",
+        description: "Please try again",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setStartDate(now);
     setIsTracking(true);
     toast({
@@ -37,10 +74,31 @@ export default function CleanCounter() {
     });
   };
 
-  const resetCounter = () => {
-    if (confirm("Reset your counter? This will start from day 1 again.")) {
-      const now = new Date().toISOString();
-      localStorage.setItem("cleanCounterStart", now);
+  const resetCounter = async () => {
+    if (!confirm("Reset your counter? This will start from day 1 again.")) {
+      return;
+    }
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const now = new Date().toISOString();
+    
+    // Delete old entry and insert new one
+    await supabase
+      .from('clean_counter_data')
+      .delete()
+      .eq('user_id', user.id);
+
+    const { error } = await supabase
+      .from('clean_counter_data')
+      .insert({
+        user_id: user.id,
+        start_date: now,
+        milestones: []
+      });
+
+    if (!error) {
       setStartDate(now);
       toast({
         title: "Counter reset",
@@ -49,7 +107,7 @@ export default function CleanCounter() {
     }
   };
 
-  const handleManualDaysSubmit = () => {
+  const handleManualDaysSubmit = async () => {
     const days = parseInt(manualDays);
     if (isNaN(days) || days < 0) {
       toast({
@@ -60,23 +118,41 @@ export default function CleanCounter() {
       return;
     }
 
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
     const calculatedStart = new Date();
     calculatedStart.setDate(calculatedStart.getDate() - days);
     const startISO = calculatedStart.toISOString();
     
-    localStorage.setItem("cleanCounterStart", startISO);
-    setStartDate(startISO);
-    setIsTracking(true);
-    setShowManualEntry(false);
-    setManualDays("");
-    
-    toast({
-      title: "Counter updated! 💜",
-      description: `Set to ${days} ${days === 1 ? 'day' : 'days'} clean`,
-    });
+    // Delete old entry and insert new one
+    await supabase
+      .from('clean_counter_data')
+      .delete()
+      .eq('user_id', user.id);
+
+    const { error } = await supabase
+      .from('clean_counter_data')
+      .insert({
+        user_id: user.id,
+        start_date: startISO,
+        milestones: []
+      });
+
+    if (!error) {
+      setStartDate(startISO);
+      setIsTracking(true);
+      setShowManualEntry(false);
+      setManualDays("");
+      
+      toast({
+        title: "Counter updated! 💜",
+        description: `Set to ${days} ${days === 1 ? 'day' : 'days'} clean`,
+      });
+    }
   };
 
-  const handleDateSelect = () => {
+  const handleDateSelect = async () => {
     if (!selectedDate) {
       toast({
         title: "No date selected",
@@ -95,16 +171,35 @@ export default function CleanCounter() {
       return;
     }
 
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
     const startISO = selectedDate.toISOString();
-    localStorage.setItem("cleanCounterStart", startISO);
-    setStartDate(startISO);
-    setIsTracking(true);
-    setShowDatePicker(false);
     
-    toast({
-      title: "Journey date updated! 💜",
-      description: "Your clean counter has been adjusted",
-    });
+    // Delete old entry and insert new one
+    await supabase
+      .from('clean_counter_data')
+      .delete()
+      .eq('user_id', user.id);
+
+    const { error } = await supabase
+      .from('clean_counter_data')
+      .insert({
+        user_id: user.id,
+        start_date: startISO,
+        milestones: []
+      });
+
+    if (!error) {
+      setStartDate(startISO);
+      setIsTracking(true);
+      setShowDatePicker(false);
+      
+      toast({
+        title: "Journey date updated! 💜",
+        description: "Your clean counter has been adjusted",
+      });
+    }
   };
 
   const getDaysSince = () => {

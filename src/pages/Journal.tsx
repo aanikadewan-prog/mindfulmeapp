@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { BookOpen, Sparkles, Pen, Calendar, Heart } from "lucide-react";
 import ActivityCompletion from "@/components/ActivityCompletion";
+import { supabase } from "@/integrations/supabase/client";
 
 const prompts = [
   "What made you smile today?",
@@ -30,14 +31,26 @@ export default function Journal() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const saved = localStorage.getItem("journalEntries");
-    if (saved) {
-      setEntries(JSON.parse(saved));
-    }
+    loadEntries();
     setSelectedPrompt(prompts[Math.floor(Math.random() * prompts.length)]);
   }, []);
 
-  const saveEntry = () => {
+  const loadEntries = async () => {
+    const { data, error } = await supabase
+      .from('journal_entries')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (!error && data) {
+      setEntries(data.map(e => ({
+        date: e.created_at,
+        content: e.content,
+        prompt: e.prompt || undefined
+      })));
+    }
+  };
+
+  const saveEntry = async () => {
     if (!currentEntry.trim()) {
       toast({
         title: "Entry is empty",
@@ -47,24 +60,42 @@ export default function Journal() {
       return;
     }
 
-    const newEntry: JournalEntry = {
-      date: new Date().toISOString(),
-      content: currentEntry,
-      prompt: selectedPrompt,
-    };
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast({
+        title: "Not authenticated",
+        description: "Please log in to save entries",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    const updatedEntries = [newEntry, ...entries];
-    setEntries(updatedEntries);
-    localStorage.setItem("journalEntries", JSON.stringify(updatedEntries));
+    const { error } = await supabase
+      .from('journal_entries')
+      .insert({
+        user_id: user.id,
+        content: currentEntry,
+        prompt: selectedPrompt
+      });
+
+    if (error) {
+      toast({
+        title: "Error saving entry",
+        description: "Please try again",
+        variant: "destructive",
+      });
+      return;
+    }
 
     toast({
       title: "Entry saved! ✨",
-      description: "Your thoughts are safe with us",
+      description: "Your thoughts are securely stored",
     });
 
     setCurrentEntry("");
     setSelectedPrompt(prompts[Math.floor(Math.random() * prompts.length)]);
     setShowCompletion(true);
+    loadEntries();
     
     // Hide completion after 5 seconds
     setTimeout(() => setShowCompletion(false), 5000);

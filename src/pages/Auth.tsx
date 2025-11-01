@@ -8,6 +8,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Heart } from "lucide-react";
+import { z } from "zod";
+
+const loginSchema = z.object({
+  email: z.string().trim().email("Please enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+const signupSchema = loginSchema.extend({
+  username: z.string().trim().min(3, "Username must be at least 3 characters").max(30, "Username must be less than 30 characters"),
+});
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -48,19 +58,19 @@ export default function Auth() {
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password) {
-      toast({
-        title: "Missing fields",
-        description: "Please enter both email and password",
-        variant: "destructive",
-      });
-      return;
-    }
+    // Client-side validation
+    const schema = isLogin ? loginSchema : signupSchema;
+    const validation = schema.safeParse(
+      isLogin 
+        ? { email, password } 
+        : { email, password, username }
+    );
 
-    if (!isLogin && !username) {
+    if (!validation.success) {
+      const error = validation.error.errors[0];
       toast({
-        title: "Missing username",
-        description: "Please enter a username",
+        title: "Validation error",
+        description: error.message,
         variant: "destructive",
       });
       return;
