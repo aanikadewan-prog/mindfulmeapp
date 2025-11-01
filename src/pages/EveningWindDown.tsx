@@ -118,6 +118,15 @@ export default function EveningWindDown() {
     }
   };
 
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+      setTimeLeft(steps[currentStep - 1].duration);
+      setCompletedSteps(completedSteps.filter(step => step !== currentStep - 1));
+      setIsActive(false);
+    }
+  };
+
   const handleReset = () => {
     setCurrentStep(0);
     setTimeLeft(steps[0].duration);
@@ -279,6 +288,11 @@ export default function EveningWindDown() {
                 <Button size="lg" variant="secondary" onClick={handlePause}>
                   Pause
                 </Button>
+                {currentStep > 0 && (
+                  <Button size="lg" variant="outline" onClick={handleBack}>
+                    Back
+                  </Button>
+                )}
                 <Button size="lg" variant="outline" onClick={handleSkip}>
                   Skip Step
                 </Button>
