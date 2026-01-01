@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { BookOpen, Sparkles, Pen, Calendar, Heart } from "lucide-react";
+import { BookOpen, Sparkles, Pen, Calendar, Heart, Phone, MessageCircle } from "lucide-react";
 import ActivityCompletion from "@/components/ActivityCompletion";
 import { supabase } from "@/integrations/supabase/client";
-
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 const prompts = [
   "What made you smile today?",
   "What's something you're grateful for?",
@@ -23,12 +23,25 @@ interface JournalEntry {
   prompt?: string;
 }
 
+// Keywords that may indicate someone is struggling - show supportive resources (not diagnosis)
+const SUPPORT_KEYWORDS = [
+  "hurt myself", "hurting myself", "self harm", "self-harm",
+  "end it all", "ending it", "want to die", "don't want to live",
+  "kill myself", "suicide", "suicidal", "no reason to live"
+];
+
 export default function Journal() {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [currentEntry, setCurrentEntry] = useState("");
   const [selectedPrompt, setSelectedPrompt] = useState("");
   const [showCompletion, setShowCompletion] = useState(false);
   const { toast } = useToast();
+
+  // Non-diagnostic check: show support resources if keywords detected
+  const showSupportResources = useMemo(() => {
+    const lowerContent = currentEntry.toLowerCase();
+    return SUPPORT_KEYWORDS.some(keyword => lowerContent.includes(keyword));
+  }, [currentEntry]);
 
   useEffect(() => {
     loadEntries();
@@ -203,6 +216,34 @@ export default function Journal() {
               ✨ New
             </Button>
           </div>
+
+          {/* Supportive resources banner - shown when concerning language detected */}
+          {showSupportResources && (
+            <Alert className="border-primary/50 bg-primary/5">
+              <Heart className="h-4 w-4" />
+              <AlertTitle>You're not alone 💜</AlertTitle>
+              <AlertDescription className="space-y-2">
+                <p className="text-sm">
+                  It sounds like you might be going through a really tough time. 
+                  If you need support, reaching out can help.
+                </p>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <Button variant="outline" size="sm" asChild>
+                    <a href="tel:988" className="flex items-center gap-1">
+                      <Phone className="h-3 w-3" />
+                      Call 988 Lifeline
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="sm" asChild>
+                    <a href="sms:741741" className="flex items-center gap-1">
+                      <MessageCircle className="h-3 w-3" />
+                      Text HOME to 741741
+                    </a>
+                  </Button>
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
 
           <div className="relative">
             <Textarea

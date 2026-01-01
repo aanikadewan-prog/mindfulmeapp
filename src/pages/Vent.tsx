@@ -248,6 +248,9 @@ export default function Vent() {
                   <CardDescription>
                     Let it out. I'm here to listen, not judge 💜
                   </CardDescription>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    This is peer support, not professional counseling. If you're in crisis, please use the resources below.
+                  </p>
                 </div>
               </div>
               <div className="flex gap-2">
