@@ -33,6 +33,8 @@ import NotFound from "./pages/NotFound";
 import Onboarding from "./pages/Onboarding";
 import Help from "./pages/Help";
 import Goals from "./pages/Goals";
+import CBTTools from "./pages/CBTTools";
+import SleepJourney from "./pages/SleepJourney";
 
 import { useEffect } from "react";
 import { initializeNotifications } from "./utils/notifications";
@@ -94,6 +96,8 @@ const App = () => {
                     <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
                     <Route path="/help" element={<ProtectedRoute><Help /></ProtectedRoute>} />
                     <Route path="/goals" element={<ProtectedRoute><Goals /></ProtectedRoute>} />
+                    <Route path="/cbt-tools" element={<ProtectedRoute><CBTTools /></ProtectedRoute>} />
+                    <Route path="/sleep-journey" element={<ProtectedRoute><SleepJourney /></ProtectedRoute>} />
                     
                     <Route path="*" element={<NotFound />} />
                   </Routes>
