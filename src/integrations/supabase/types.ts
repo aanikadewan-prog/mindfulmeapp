@@ -89,6 +89,36 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_plans: {
+        Row: {
+          activities: Json
+          completed_activities: string[] | null
+          created_at: string
+          id: string
+          plan_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          activities?: Json
+          completed_activities?: string[] | null
+          created_at?: string
+          id?: string
+          plan_date?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          activities?: Json
+          completed_activities?: string[] | null
+          created_at?: string
+          id?: string
+          plan_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           category: string | null
@@ -215,6 +245,93 @@ export type Database = {
           created_at?: string | null
           id?: string
           username?: string | null
+        }
+        Relationships: []
+      }
+      sleep_logs: {
+        Row: {
+          awakenings: number | null
+          bedtime: string
+          created_at: string
+          factors: string[] | null
+          id: string
+          notes: string | null
+          sleep_quality: number
+          time_to_fall_asleep: number | null
+          user_id: string
+          wake_time: string
+        }
+        Insert: {
+          awakenings?: number | null
+          bedtime: string
+          created_at?: string
+          factors?: string[] | null
+          id?: string
+          notes?: string | null
+          sleep_quality: number
+          time_to_fall_asleep?: number | null
+          user_id: string
+          wake_time: string
+        }
+        Update: {
+          awakenings?: number | null
+          bedtime?: string
+          created_at?: string
+          factors?: string[] | null
+          id?: string
+          notes?: string | null
+          sleep_quality?: number
+          time_to_fall_asleep?: number | null
+          user_id?: string
+          wake_time?: string
+        }
+        Relationships: []
+      }
+      thought_records: {
+        Row: {
+          automatic_thought: string
+          balanced_thought: string | null
+          cognitive_distortion: string | null
+          created_at: string
+          emotion_intensity: number
+          emotions: string[]
+          evidence_against: string | null
+          evidence_for: string | null
+          id: string
+          new_emotion_intensity: number | null
+          situation: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          automatic_thought: string
+          balanced_thought?: string | null
+          cognitive_distortion?: string | null
+          created_at?: string
+          emotion_intensity?: number
+          emotions?: string[]
+          evidence_against?: string | null
+          evidence_for?: string | null
+          id?: string
+          new_emotion_intensity?: number | null
+          situation: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          automatic_thought?: string
+          balanced_thought?: string | null
+          cognitive_distortion?: string | null
+          created_at?: string
+          emotion_intensity?: number
+          emotions?: string[]
+          evidence_against?: string | null
+          evidence_for?: string | null
+          id?: string
+          new_emotion_intensity?: number | null
+          situation?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -390,6 +507,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      worry_logs: {
+        Row: {
+          action_steps: string[] | null
+          category: string | null
+          created_at: string
+          id: string
+          intensity: number
+          outcome: string | null
+          resolved: boolean | null
+          updated_at: string
+          user_id: string
+          worry: string
+        }
+        Insert: {
+          action_steps?: string[] | null
+          category?: string | null
+          created_at?: string
+          id?: string
+          intensity?: number
+          outcome?: string | null
+          resolved?: boolean | null
+          updated_at?: string
+          user_id: string
+          worry: string
+        }
+        Update: {
+          action_steps?: string[] | null
+          category?: string | null
+          created_at?: string
+          id?: string
+          intensity?: number
+          outcome?: string | null
+          resolved?: boolean | null
+          updated_at?: string
+          user_id?: string
+          worry?: string
+        }
+        Relationships: []
       }
     }
     Views: {
