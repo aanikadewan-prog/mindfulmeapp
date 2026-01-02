@@ -32,6 +32,7 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Onboarding from "./pages/Onboarding";
 import Help from "./pages/Help";
+import Goals from "./pages/Goals";
 
 import { useEffect } from "react";
 import { initializeNotifications } from "./utils/notifications";
@@ -92,6 +93,7 @@ const App = () => {
                     <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                     <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
                     <Route path="/help" element={<ProtectedRoute><Help /></ProtectedRoute>} />
+                    <Route path="/goals" element={<ProtectedRoute><Goals /></ProtectedRoute>} />
                     
                     <Route path="*" element={<NotFound />} />
                   </Routes>
