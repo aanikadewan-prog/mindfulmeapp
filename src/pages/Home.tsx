@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { Heart, BookOpen, TrendingUp, Sparkles, Calendar } from "lucide-react";
+import { Heart, BookOpen, TrendingUp, Sparkles, Calendar, Sun, Target } from "lucide-react";
+import beachHero from "@/assets/beach-hero.jpg";
 
 const quotes = [
   "You are stronger than you think. One day at a time. 💜",
@@ -25,7 +26,6 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get user profile
     const fetchProfile = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
@@ -42,11 +42,8 @@ export default function Home() {
     };
 
     fetchProfile();
-
-    // Get random quote
     setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
 
-    // Get streak
     const savedStreak = localStorage.getItem("streak");
     if (savedStreak) {
       setStreak(parseInt(savedStreak));
@@ -62,51 +59,75 @@ export default function Home() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
-      <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/30">
-        <CardHeader className="text-center pb-3">
-          <div className="mx-auto mb-3">
-            <Heart className="h-12 w-12 text-primary mx-auto animate-pulse" />
+      {/* Hero Section with Beach Background */}
+      <div className="relative rounded-2xl overflow-hidden shadow-lg">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${beachHero})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/20 to-background/80" />
+        
+        <div className="relative z-10 px-6 py-12 text-center">
+          <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-primary/20 backdrop-blur-sm flex items-center justify-center">
+            <Sun className="h-8 w-8 text-primary-foreground drop-shadow-lg" />
           </div>
-          <CardTitle className="text-3xl mb-2">
-            {getGreeting()}{username ? `, ${username}` : ""}
-          </CardTitle>
-          <CardDescription className="text-base italic">
+          
+          <h1 className="text-4xl font-bold mb-2 text-primary-foreground drop-shadow-md">
+            {getGreeting()}{username ? `, ${username}` : ""}! 👋
+          </h1>
+          
+          <p className="text-lg text-primary-foreground/90 italic max-w-md mx-auto drop-shadow-sm">
             "{quote}"
-          </CardDescription>
-        </CardHeader>
-        {streak > 0 && (
-          <CardContent className="text-center pb-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 rounded-full">
+          </p>
+          
+          {streak > 0 && (
+            <div className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 bg-card/90 backdrop-blur-sm rounded-full shadow-md">
               <span className="text-2xl">🔥</span>
-              <span className="font-semibold">{streak} day{streak !== 1 ? "s" : ""} strong</span>
+              <span className="font-semibold text-foreground">{streak} day{streak !== 1 ? "s" : ""} strong!</span>
             </div>
-          </CardContent>
-        )}
+          )}
+        </div>
+      </div>
+
+      {/* Welcome Message */}
+      <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
+        <CardContent className="py-5 text-center">
+          <div className="flex items-center justify-center gap-2 text-muted-foreground">
+            <Heart className="h-5 w-5 text-primary animate-pulse" />
+            <span>Welcome to your peaceful space. Take a deep breath and begin when you're ready.</span>
+            <Heart className="h-5 w-5 text-primary animate-pulse" />
+          </div>
+        </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      {/* Quick Actions Grid */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card 
-          className="cursor-pointer hover:border-primary/50 transition-all hover:shadow-lg group"
+          className="cursor-pointer hover:border-primary/50 transition-all hover:shadow-lg hover:-translate-y-1 group bg-card/95"
           onClick={() => navigate("/check-in")}
         >
-          <CardHeader>
+          <CardHeader className="pb-4">
             <div className="flex items-center gap-3">
-              <Calendar className="h-8 w-8 text-primary group-hover:scale-110 transition-transform" />
+              <div className="p-2.5 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Calendar className="h-6 w-6 text-primary" />
+              </div>
               <div>
                 <CardTitle className="text-lg">Daily Check-In</CardTitle>
-                <CardDescription>How are you feeling today?</CardDescription>
+                <CardDescription>How are you feeling?</CardDescription>
               </div>
             </div>
           </CardHeader>
         </Card>
 
         <Card 
-          className="cursor-pointer hover:border-primary/50 transition-all hover:shadow-lg group"
+          className="cursor-pointer hover:border-primary/50 transition-all hover:shadow-lg hover:-translate-y-1 group bg-card/95"
           onClick={() => navigate("/journal")}
         >
-          <CardHeader>
+          <CardHeader className="pb-4">
             <div className="flex items-center gap-3">
-              <BookOpen className="h-8 w-8 text-secondary group-hover:scale-110 transition-transform" />
+              <div className="p-2.5 rounded-xl bg-secondary/20 group-hover:bg-secondary/30 transition-colors">
+                <BookOpen className="h-6 w-6 text-secondary" />
+              </div>
               <div>
                 <CardTitle className="text-lg">Journal</CardTitle>
                 <CardDescription>Write your thoughts</CardDescription>
@@ -116,14 +137,16 @@ export default function Home() {
         </Card>
 
         <Card 
-          className="cursor-pointer hover:border-primary/50 transition-all hover:shadow-lg group"
+          className="cursor-pointer hover:border-primary/50 transition-all hover:shadow-lg hover:-translate-y-1 group bg-card/95"
           onClick={() => navigate("/activities")}
         >
-          <CardHeader>
+          <CardHeader className="pb-4">
             <div className="flex items-center gap-3">
-              <Sparkles className="h-8 w-8 text-accent group-hover:scale-110 transition-transform" />
+              <div className="p-2.5 rounded-xl bg-accent/20 group-hover:bg-accent/30 transition-colors">
+                <Sparkles className="h-6 w-6 text-accent" />
+              </div>
               <div>
-                <CardTitle className="text-lg">Wellness Activities</CardTitle>
+                <CardTitle className="text-lg">Activities</CardTitle>
                 <CardDescription>Find what helps you</CardDescription>
               </div>
             </div>
@@ -131,28 +154,65 @@ export default function Home() {
         </Card>
 
         <Card 
-          className="cursor-pointer hover:border-primary/50 transition-all hover:shadow-lg group"
+          className="cursor-pointer hover:border-primary/50 transition-all hover:shadow-lg hover:-translate-y-1 group bg-card/95"
+          onClick={() => navigate("/goals")}
+        >
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Target className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Goals</CardTitle>
+                <CardDescription>Track your resolutions</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+        </Card>
+
+        <Card 
+          className="cursor-pointer hover:border-primary/50 transition-all hover:shadow-lg hover:-translate-y-1 group bg-card/95"
           onClick={() => navigate("/progress")}
         >
-          <CardHeader>
+          <CardHeader className="pb-4">
             <div className="flex items-center gap-3">
-              <TrendingUp className="h-8 w-8 text-primary group-hover:scale-110 transition-transform" />
+              <div className="p-2.5 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <TrendingUp className="h-6 w-6 text-primary" />
+              </div>
               <div>
-                <CardTitle className="text-lg">Your Progress</CardTitle>
+                <CardTitle className="text-lg">Progress</CardTitle>
                 <CardDescription>See how far you've come</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+        </Card>
+
+        <Card 
+          className="cursor-pointer hover:border-primary/50 transition-all hover:shadow-lg hover:-translate-y-1 group bg-card/95"
+          onClick={() => navigate("/vent")}
+        >
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-secondary/20 group-hover:bg-secondary/30 transition-colors">
+                <Heart className="h-6 w-6 text-secondary" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Talk It Out</CardTitle>
+                <CardDescription>Vent and feel heard</CardDescription>
               </div>
             </div>
           </CardHeader>
         </Card>
       </div>
 
-      <Card className="bg-accent/5 border-accent/20">
-        <CardContent className="pt-6 pb-6 text-center">
-          <p className="text-sm text-muted-foreground mb-4">
-            💜 Remember: Progress isn't linear. Every day you show up for yourself matters.
+      {/* Call to Action */}
+      <Card className="bg-gradient-to-r from-primary/5 to-secondary/5 border-primary/20">
+        <CardContent className="py-8 text-center">
+          <p className="text-muted-foreground mb-5 text-lg">
+            🌊 Like the ocean, peace comes in waves. Let today be a gentle one.
           </p>
-          <Button onClick={() => navigate("/check-in")} size="lg">
-            Start Your Day
+          <Button onClick={() => navigate("/check-in")} size="lg" className="px-8 shadow-md hover:shadow-lg transition-shadow">
+            Begin Your Day
           </Button>
         </CardContent>
       </Card>
