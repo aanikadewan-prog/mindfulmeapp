@@ -182,15 +182,15 @@ export default function MindfulTea() {
 
                 <Card className="bg-accent/50">
                   <CardContent className="pt-4">
-                    <h4 className="font-semibold mb-3">🫖 Mindful Brewing Steps</h4>
+                    <h4 className="font-semibold mb-3">🫖 Mindful Brewing (SIFT Practice)</h4>
                     <ol className="space-y-2 text-sm text-muted-foreground">
-                      <li className="flex gap-2"><span className="font-semibold text-primary">1.</span> Boil water to the right temperature</li>
-                      <li className="flex gap-2"><span className="font-semibold text-primary">2.</span> While it heats, take 3 deep breaths</li>
-                      <li className="flex gap-2"><span className="font-semibold text-primary">3.</span> Add tea and pour the water slowly</li>
-                      <li className="flex gap-2"><span className="font-semibold text-primary">4.</span> Watch the color change as it steeps</li>
-                      <li className="flex gap-2"><span className="font-semibold text-primary">5.</span> Inhale the aroma - notice what you smell</li>
-                      <li className="flex gap-2"><span className="font-semibold text-primary">6.</span> Remove the tea and find a cozy spot</li>
-                      <li className="flex gap-2"><span className="font-semibold text-primary">7.</span> Hold the warm cup and appreciate this moment</li>
+                      <li className="flex gap-2"><span className="font-semibold text-primary">1.</span> Boil water - notice the <strong>Sensations</strong> of warmth</li>
+                      <li className="flex gap-2"><span className="font-semibold text-primary">2.</span> As it heats, take 3 breaths and check your <strong>Feelings</strong></li>
+                      <li className="flex gap-2"><span className="font-semibold text-primary">3.</span> Pour slowly - what <strong>Images</strong> or memories arise?</li>
+                      <li className="flex gap-2"><span className="font-semibold text-primary">4.</span> Watch the color change - let <strong>Thoughts</strong> drift like steam</li>
+                      <li className="flex gap-2"><span className="font-semibold text-primary">5.</span> Inhale the aroma - anchor into this present moment</li>
+                      <li className="flex gap-2"><span className="font-semibold text-primary">6.</span> Hold the warm cup - feel the temperature on your palms</li>
+                      <li className="flex gap-2"><span className="font-semibold text-primary">7.</span> Sip slowly - notice the journey from lips to belly</li>
                     </ol>
                   </CardContent>
                 </Card>
@@ -198,16 +198,34 @@ export default function MindfulTea() {
             </Card>
           )}
 
+          {/* Mindsight Integration */}
+          <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
+            <CardContent className="pt-6">
+              <h4 className="font-semibold mb-3 text-center">🧠 The Wheel of Awareness</h4>
+              <p className="text-sm text-muted-foreground mb-3 text-center">
+                Imagine your mind as a wheel. You are the calm hub; sensations are spokes on the rim.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• <strong>Hub:</strong> Your observing self - calm, present, aware</li>
+                <li>• <strong>Rim:</strong> Taste, warmth, thoughts, emotions - they come and go</li>
+                <li>• <strong>Practice:</strong> Stay at the hub while noticing the rim</li>
+              </ul>
+              <p className="text-sm text-muted-foreground mt-3 text-center italic">
+                "Where attention goes, neural firing flows, and connection grows"
+              </p>
+            </CardContent>
+          </Card>
+
           {/* General Tips */}
           <Card className="bg-muted/50">
             <CardContent className="pt-6">
               <h4 className="font-semibold mb-3 text-center">💜 Making Tea a Mindful Practice</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Treat tea preparation as a mini-meditation</li>
-                <li>• Put your phone away during your tea time</li>
-                <li>• Notice the temperature, smell, and taste</li>
-                <li>• Take small sips and really taste each one</li>
-                <li>• This is your moment - there's no rush</li>
+                <li>• <strong>Integration:</strong> Connect body sensations with mental calm</li>
+                <li>• Put your phone away - give yourself this gift</li>
+                <li>• <strong>Name it to tame it:</strong> Notice and name what you feel</li>
+                <li>• Take small sips - really taste each one</li>
+                <li>• This is your moment of presence - there's no rush</li>
               </ul>
             </CardContent>
           </Card>
