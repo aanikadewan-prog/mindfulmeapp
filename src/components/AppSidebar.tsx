@@ -22,7 +22,7 @@ const items = [
   { title: "Activities", url: "/activities", icon: Sparkles },
   { title: "Rewards", url: "/rewards", icon: Trophy },
   { title: "Goals", url: "/goals", icon: Target },
-  { title: "CBT Tools", url: "/cbt-tools", icon: Brain },
+  { title: "Cognitive Therapy", url: "/cbt-tools", icon: Brain },
   { title: "Sleep Journey", url: "/sleep-journey", icon: Moon },
   { title: "Clean Counter", url: "/clean", icon: Heart },
   { title: "Help", url: "/help", icon: HelpCircle },
