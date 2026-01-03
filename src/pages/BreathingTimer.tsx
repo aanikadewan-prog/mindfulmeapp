@@ -321,16 +321,44 @@ export default function BreathingTimer() {
             </Button>
           </div>
 
+          {/* Mindsight SIFT Practice */}
+          <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
+            <CardContent className="pt-6">
+              <h4 className="font-semibold mb-3 text-center">🧠 Mindsight: SIFT Your Experience</h4>
+              <p className="text-sm text-muted-foreground mb-4 text-center">
+                As you breathe, gently notice what's happening inside:
+              </p>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="p-3 bg-background/50 rounded-lg">
+                  <span className="font-bold text-primary">S</span>ensations
+                  <p className="text-xs text-muted-foreground mt-1">What do you feel in your body?</p>
+                </div>
+                <div className="p-3 bg-background/50 rounded-lg">
+                  <span className="font-bold text-primary">I</span>mages
+                  <p className="text-xs text-muted-foreground mt-1">What pictures come to mind?</p>
+                </div>
+                <div className="p-3 bg-background/50 rounded-lg">
+                  <span className="font-bold text-primary">F</span>eelings
+                  <p className="text-xs text-muted-foreground mt-1">What emotions are present?</p>
+                </div>
+                <div className="p-3 bg-background/50 rounded-lg">
+                  <span className="font-bold text-primary">T</span>houghts
+                  <p className="text-xs text-muted-foreground mt-1">What's your mind saying?</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Tips */}
           <Card className="bg-muted/50">
             <CardContent className="pt-6">
-              <h4 className="font-semibold mb-3 text-center">💡 Tips for Better Practice</h4>
+              <h4 className="font-semibold mb-3 text-center">💡 Mindful Awareness Tips</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Find a quiet, comfortable space</li>
-                <li>• Sit with your back straight but relaxed</li>
-                <li>• Focus on the movement of your breath</li>
-                <li>• If your mind wanders, gently bring it back</li>
-                <li>• Aim for 5-10 cycles for a calming effect</li>
+                <li>• <strong>Name it to tame it:</strong> Simply naming your feelings helps calm the brain</li>
+                <li>• <strong>Integration:</strong> Connect your breathing body with your thinking mind</li>
+                <li>• <strong>The wheel of awareness:</strong> You are the hub, experiences are the rim</li>
+                <li>• If your mind wanders, that's normal - gently return to breath</li>
+                <li>• Each breath is a chance to choose presence over reactivity</li>
               </ul>
             </CardContent>
           </Card>

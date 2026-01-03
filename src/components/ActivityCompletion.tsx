@@ -15,6 +15,7 @@ interface DailyActivity {
   completed: boolean;
 }
 
+// Fixed ordered list of daily activities based on goals
 const ACTIVITIES_BY_GOAL: Record<string, { id: string; name: string; route: string }[]> = {
   stress: [
     { id: "breathing", name: "Deep Breathing", route: "/breathing" },
@@ -70,14 +71,10 @@ export default function ActivityCompletion({ activityName, onComplete }: Activit
   const [nextActivity, setNextActivity] = useState<DailyActivity | null>(null);
   const [completedCount, setCompletedCount] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (isCompleted) {
-      loadDailyProgress();
-    }
-  }, [isCompleted]);
-
-  const loadDailyProgress = async () => {
+  const loadDailyProgress = async (justCompletedName: string) => {
+    setIsLoading(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
@@ -91,7 +88,7 @@ export default function ActivityCompletion({ activityName, onComplete }: Activit
 
       const goals = prefs?.goals || ["stress", "focus"];
 
-      // Build activities list from goals
+      // Build ordered activities list from goals (no shuffling - maintain order)
       const activities: DailyActivity[] = [];
       const usedIds = new Set<string>();
 
@@ -105,7 +102,7 @@ export default function ActivityCompletion({ activityName, onComplete }: Activit
         });
       });
 
-      // Get today's completions
+      // Get today's completions from database
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       
@@ -116,31 +113,44 @@ export default function ActivityCompletion({ activityName, onComplete }: Activit
         .gte("completed_at", today.toISOString());
 
       const completedNames = completions?.map(c => c.activity_name.toLowerCase()) || [];
+      
+      // Also include the just-completed activity (in case DB hasn't updated yet)
+      const allCompletedNames = [...completedNames, justCompletedName.toLowerCase()];
 
-      // Mark completed activities
-      const updatedActivities = activities.map(a => ({
-        ...a,
-        completed: completedNames.some(c => 
-          c.includes(a.name.toLowerCase()) || a.name.toLowerCase().includes(c)
-        )
-      }));
+      // Mark completed activities with better matching
+      const updatedActivities = activities.map(a => {
+        const activityLower = a.name.toLowerCase();
+        const isActivityCompleted = allCompletedNames.some(c => {
+          // Exact match
+          if (c === activityLower) return true;
+          // Partial match (e.g., "mindful tea" matches "Mindful Tea")
+          if (c.includes(activityLower) || activityLower.includes(c)) return true;
+          // Match by key words
+          const cWords = c.split(' ');
+          const aWords = activityLower.split(' ');
+          return cWords.some(cw => aWords.some(aw => cw === aw && cw.length > 3));
+        });
+        return { ...a, completed: isActivityCompleted };
+      });
 
       setDailyActivities(updatedActivities);
       setTotalCount(updatedActivities.length);
-      setCompletedCount(updatedActivities.filter(a => a.completed).length);
+      
+      const completed = updatedActivities.filter(a => a.completed).length;
+      setCompletedCount(completed);
 
-      // Find next incomplete activity
+      // Find next incomplete activity (in order)
       const next = updatedActivities.find(a => !a.completed);
       setNextActivity(next || null);
     } catch (error) {
       console.error("Error loading daily progress:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleComplete = async () => {
-    setIsCompleted(true);
-    
-    // Trigger confetti
+    // Trigger confetti immediately
     confetti({
       particleCount: 100,
       spread: 70,
@@ -168,6 +178,10 @@ export default function ActivityCompletion({ activityName, onComplete }: Activit
       console.error('Error:', error);
     }
 
+    // Set completed and load progress (pass the activity name so we count it even if DB is slow)
+    setIsCompleted(true);
+    await loadDailyProgress(activityName);
+
     if (onComplete) {
       onComplete();
     }
@@ -194,7 +208,7 @@ export default function ActivityCompletion({ activityName, onComplete }: Activit
           </div>
 
           {/* Daily Progress */}
-          {totalCount > 0 && (
+          {totalCount > 0 && !isLoading && (
             <div className="bg-background/50 rounded-lg p-4 space-y-3">
               <div className="flex items-center justify-between text-sm">
                 <span className="font-medium">Today's Progress</span>
@@ -202,11 +216,11 @@ export default function ActivityCompletion({ activityName, onComplete }: Activit
               </div>
               <Progress value={progress} className="h-2" />
               
-              {/* Activity checklist */}
+              {/* Activity checklist - in order */}
               <div className="space-y-2 pt-2">
                 {dailyActivities.map((activity, index) => (
                   <div 
-                    key={activity.id} 
+                    key={`${activity.id}-${index}`} 
                     className={`flex items-center gap-2 text-sm ${
                       activity.completed ? "text-primary" : "text-muted-foreground"
                     }`}
@@ -219,7 +233,7 @@ export default function ActivityCompletion({ activityName, onComplete }: Activit
                     <span className={activity.completed ? "line-through" : ""}>
                       {activity.name}
                     </span>
-                    {index === completedCount && !activity.completed && (
+                    {!activity.completed && nextActivity?.id === activity.id && (
                       <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full ml-auto">
                         Up next
                       </span>
@@ -227,6 +241,12 @@ export default function ActivityCompletion({ activityName, onComplete }: Activit
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {isLoading && (
+            <div className="bg-background/50 rounded-lg p-4 text-center">
+              <p className="text-sm text-muted-foreground">Loading your progress...</p>
             </div>
           )}
 

@@ -309,16 +309,35 @@ export default function ProgressiveRelaxation() {
             </div>
           </div>
 
+          {/* Mindsight Body-Mind Integration */}
+          <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
+            <CardContent className="pt-6">
+              <h4 className="font-semibold mb-3 text-center">🧠 Body-Mind Integration</h4>
+              <p className="text-sm text-muted-foreground mb-3 text-center">
+                Your body stores emotions. As you release tension, notice what emerges:
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• <strong>Shoulders:</strong> Often hold stress and responsibility</li>
+                <li>• <strong>Jaw:</strong> May clench during unspoken frustration</li>
+                <li>• <strong>Stomach:</strong> Connected to anxiety and "gut feelings"</li>
+                <li>• <strong>Chest:</strong> Where grief and love often reside</li>
+              </ul>
+              <p className="text-sm text-muted-foreground mt-3 text-center italic">
+                "The body keeps the score" - releasing tension releases emotions
+              </p>
+            </CardContent>
+          </Card>
+
           {/* Tips */}
           <Card className="bg-muted/50">
             <CardContent className="pt-6">
-              <h4 className="font-semibold mb-3 text-center">💡 Tips for Best Results</h4>
+              <h4 className="font-semibold mb-3 text-center">💡 Mindful Practice Tips</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Lie down in a comfortable position</li>
-                <li>• Tense each muscle group for 5 seconds, then release completely</li>
-                <li>• Pay attention to the contrast between tension and relaxation</li>
+                <li>• <strong>Notice the contrast:</strong> Tension creates awareness of relaxation</li>
+                <li>• <strong>Stay curious:</strong> What sensations do you discover?</li>
+                <li>• <strong>Integration:</strong> Connect physical release with emotional calm</li>
                 <li>• Breathe steadily throughout - don't hold your breath</li>
-                <li>• If something hurts, skip that muscle group</li>
+                <li>• If something hurts, honor your body and skip it</li>
               </ul>
             </CardContent>
           </Card>
