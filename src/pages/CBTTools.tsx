@@ -268,7 +268,7 @@ export default function CBTTools() {
         <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
           <Brain className="h-8 w-8 text-primary" />
         </div>
-        <h1 className="text-3xl font-bold mb-2">CBT Tools</h1>
+        <h1 className="text-3xl font-bold mb-2">Cognitive Therapy Tools</h1>
         <p className="text-muted-foreground">
           Evidence-based techniques to challenge unhelpful thoughts and manage anxiety
         </p>
