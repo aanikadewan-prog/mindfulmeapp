@@ -14,7 +14,7 @@ export default function PhoneFreeHour() {
   const [isActive, setIsActive] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [sessionsToday, setSessionsToday] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const today = new Date().toDateString();

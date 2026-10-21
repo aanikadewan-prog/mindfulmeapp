@@ -76,7 +76,7 @@ export default function EveningWindDown() {
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setTimeout>;
 
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
