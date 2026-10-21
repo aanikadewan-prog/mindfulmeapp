@@ -139,7 +139,7 @@ export default function GentleStretching() {
   const [completedStretches, setCompletedStretches] = useState<number[]>([]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setTimeout>;
 
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
